@@ -204,7 +204,6 @@ body {
 .skills-box i {
     font-size: 45px;
     margin-right: 10px;
-    color: var(--primary-color) !important;
     transition: transform 0.3s ease, color 0.3s ease, filter 0.3s ease;
 }
 
@@ -259,23 +258,5 @@ body {
 @keyframes fadeIn {
     to {
         opacity: 1;
-    }
-}
-
-/* === Animação para os ícones de skills com atraso sequencial === */
-.skills-box i {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: slideUp 0.6s ease-out forwards;
-}
-
-.skills-box i:nth-child(2) { animation-delay: 0.2s; }
-.skills-box i:nth-child(3) { animation-delay: 0.4s; }
-.skills-box i:nth-child(4) { animation-delay: 0.6s; }
-
-@keyframes slideUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }
