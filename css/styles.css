@@ -1,0 +1,237 @@
+* {
+    font-family: "Roboto", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #ff6b00;          /* laranja vibrante */
+    --secondary-color: #cc5500;        /* laranja escuro */
+    --main-text-color: #f2f2f2;        /* texto claro */
+    --background-color: #0f0f0f;       /* fundo geral */
+    --bio-bg-color: #1c1c1e;           /* fundo da bio */
+    --bio-border-color: #444;          /* borda sutil */
+    --about-bg-color: #0f0f0f;         /* fundo seção sobre */
+    --border-color: #444;              /* linhas e separadores */
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--main-text-color);
+    line-height: 1.6;
+}
+
+
+.highlight {
+    color: var(--primary-color);
+}
+
+#container {
+    display : flex;
+    flex-direction: row;
+    color: var(--main-text-color);
+}
+
+#bio-container {
+    flex: 1 1 20%;
+    min-height: 100vh;
+    background-color: var(--bio-bg-color);
+    border: 5px solid var(--bio-border-color);
+    padding: 30px 12px;
+    text-align: center;
+}
+
+#about-container {
+    flex: 1 1 80%;
+    min-height: 100vh;
+    background-color: var(--about-bg-color);
+    padding: 50px;
+}
+
+#bio-container h2 {
+    margin-bottom: 25px;
+}
+
+#bio-container p {
+    margin-bottom: 20px;
+}
+
+#profile-image  {
+    width: 175px;
+    height: 175px;
+    border-radius: 50%;
+    margin-bottom: 25px;
+}
+
+#social-container {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    border-bottom: 1px solid var(--border-color);    
+    padding-bottom: 25px;
+    margin-bottom: 25px;
+}
+
+#social-container li {
+    flex: 1 1 0;
+    max-width: 60px;
+}
+
+#bio-container #welcome-text {
+    font-weight: bold;
+}
+
+#social-container li a {
+    text-decoration: none;
+    color: var(--primary-color);
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+}
+#email-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+#email-container ion-icon, 
+#email-container a {
+    flex: 1 1 0;
+}
+#email-container a {
+    text-decoration: none;
+    color: var(--main-text-color);
+    max-width: 275px;
+}
+#email-container ion-icon {
+    font-size: 20px;
+    color: var(--primary-color);
+    margin-right: 5px;
+    max-width: 20px;
+}
+
+#name {
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+#title {
+    font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+.description {
+    max-width: 75%;
+    margin-bottom: 10px;
+}
+
+#btn-projects {
+    font-weight: bold;
+    font-size: 16px;
+    text-decoration: none;
+    color: var(--main-text-color);
+    background-color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    padding: 15px 10px;
+    border-radius: 5px;
+    margin: 25px 0;
+    transition: .5s;
+    width: 150px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    
+}
+
+#btn-projects ion-icon,
+#btn-projects span {
+    flex: 1 1 0;
+}
+
+#btn-projects ion-icon{
+    font-size: 20px;
+    max-width: 20px;
+}
+
+#btn-projects:hover {
+    background-color: transparent;
+    color: var(--primary-color);
+}
+
+#skills-section-title {
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
+    margin-bottom: 20px;
+    font-size: 32px
+}
+
+#skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.skills-box {
+    flex: 1 1 33%;
+    min-width: 33%;
+    margin-bottom: 35px;
+}
+
+.skills-title {
+    font-size: 24px;
+    margin-bottom: 25px;
+    font-weight: bold;
+    padding-left: 10px;
+    border-left: 5px solid var(--primary-color);
+}
+
+.skills-box i {
+    font-size: 45px;
+    margin-right: 10px;
+}
+
+/* Força a cor laranja nos ícones do Linux e Bash */
+.devicon-linux-plain,
+.devicon-bash-plain {
+    color: var(--primary-color) !important;
+}
+
+#skills-container i {
+
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+#skills-container i:hover {
+    transform: scale(1.2);
+    color: var(--main-text-color) !important; /* Cor clara no hover */
+
+}
+
+@media (max-width: 768px) {
+    #container {
+        flex-direction: column;
+    }
+
+    #bio-container, #about-container {
+        flex: 1 1 100%;
+    }
+
+    .skills-box {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+
+    .description {
+        max-width: 100%;
+    }
+
+    #btn-projects {
+        width: 100%;
+    }
+
+    #email-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+}
