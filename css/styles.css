@@ -662,6 +662,13 @@ ul {
   margin-bottom: var(--spacing-xl);
 }
 
+.project-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  cursor: pointer;
+}
+
 .project-card {
   padding: var(--spacing-lg);
   display: flex;

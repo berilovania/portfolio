@@ -168,7 +168,7 @@
     if (lower.match(/\b(oi|olá|ola|hello|hi)\b/)) return '  > oi! bem-vindo ao terminal :)\n  > sinta-se à vontade para \n    explorar os comandos! \n  > dica: tente "help"';
     if (lower.includes('ping'))        return '  > pong (64 bytes, tempo=0.4ms)\n  <span class="t-dim">resposta vinda de... Nebuchadnezzar?</span>';
     if (lower.includes('ls'))          return '  > deploy.yml  src/  README.md\n  <span class="t-dim">.secret_42  (permissão negada)</span>';
-    if (lower.includes('whoami'))      return '  > matheus — engenheiro devops\n  <span class="t-dim">ou seria... um hacker?</span>';
+    if (lower.includes('whoami'))      return '  > matheus — engenheiro devops';
     return '  > ' + escapeHtml(cmd.slice(0, 20)) + ': não encontrado';
   }
 
@@ -418,7 +418,7 @@
     if (lower.match(/\b(oi|olá|ola|hello|hi)\b/)) return '  > olá, engenheiro(a)! tudo ok?\n  > sinta-se à vontade para \n    explorar os comandos! \n  > dica: tente "help"';
     if (lower.includes('ping'))                return '  > pong (64 bytes, tempo=0.4ms)\n  <span class="t-dim">resposta vinda de... Nebuchadnezzar?</span>';
     if (lower.includes('ls'))                  return '  > main.tf  vars.tf  outputs.tf\n  <span class="t-dim">.secret_42  (permissão negada)</span>';
-    if (lower.includes('whoami'))              return '  > matheus — engenheiro devops\n  <span class="t-dim">ou seria... um hacker?</span>';
+    if (lower.includes('whoami'))              return '  > matheus — engenheiro devops';
     return '  > ' + escapeHtml(cmd.slice(0, 20)) + ': não encontrado';
   }
 
