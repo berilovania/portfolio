@@ -104,8 +104,7 @@
   var HERO_MAX     = 30;
 
   var HERO_HELP_1 = [
-    '',
-    '  <span class="t-ok">Comandos disponíveis (1/3):</span>',
+    '  <span class="t-ok">Comandos (1/3):</span>',
     '    git push  <span class="t-dim">— deploy para produção</span>',
     '    docker    <span class="t-dim">— status da imagem</span>',
     '    kubectl   <span class="t-dim">— status dos pods</span>',
@@ -113,13 +112,11 @@
     '    whoami    <span class="t-dim">— quem sou eu</span>',
     '    ls        <span class="t-dim">— listar arquivos</span>',
     '    ping      <span class="t-dim">— testar conexão</span>',
-    '',
     '  <span class="t-dim">help 2 → mais comandos</span>',
   ].join('\n');
 
   var HERO_HELP_2 = [
-    '',
-    '  <span class="t-ok">Comandos disponíveis (2/3):</span>',
+    '  <span class="t-ok">Comandos (2/3):</span>',
     '    devops    <span class="t-dim">— reiniciar animação</span>',
     '    date      <span class="t-dim">— data e hora atual</span>',
     '    uptime    <span class="t-dim">— tempo online</span>',
@@ -127,17 +124,14 @@
     '    status    <span class="t-dim">— status do sistema</span>',
     '    neofetch  <span class="t-dim">— info do sistema</span>',
     '    clear     <span class="t-dim">— limpar tela</span>',
-    '',
     '  <span class="t-dim">help 3 → ???</span>',
   ].join('\n');
 
   var HERO_HELP_3 = [
-    '',
     '  <span class="t-ok">Easter eggs (3/3):</span>',
     '    <span class="t-glitch">▓░▒█▓░▒</span>  <span class="t-dim">— ???</span>',
     '    <span class="t-glitch">█▒░▓█▒░</span>  <span class="t-dim">— ???</span>',
     '    <span class="t-glitch">░▓█▒░▓█</span>  <span class="t-dim">— ???</span>',
-    '',
     '  <span class="t-pending">encontre os 3 comandos</span>',
     '  <span class="t-pending">secretos... boa sorte!</span>',
   ].join('\n');
@@ -365,8 +359,7 @@
   var aboutAnimHtml = '';
 
   var ABOUT_HELP_1 = [
-    '',
-    '  <span class="t-ok">Comandos disponíveis (1/3):</span>',
+    '  <span class="t-ok">Comandos (1/3):</span>',
     '    terraform <span class="t-dim">— gerenciar infra</span>',
     '    aws       <span class="t-dim">— status instâncias</span>',
     '    kubectl   <span class="t-dim">— status dos pods</span>',
@@ -374,13 +367,11 @@
     '    whoami    <span class="t-dim">— quem sou eu</span>',
     '    ls        <span class="t-dim">— listar arquivos</span>',
     '    ping      <span class="t-dim">— testar conexão</span>',
-    '',
     '  <span class="t-dim">help 2 → mais comandos</span>',
   ].join('\n');
 
   var ABOUT_HELP_2 = [
-    '',
-    '  <span class="t-ok">Comandos disponíveis (2/3):</span>',
+    '  <span class="t-ok">Comandos (2/3):</span>',
     '    devops    <span class="t-dim">— reiniciar animação</span>',
     '    date      <span class="t-dim">— data e hora atual</span>',
     '    uptime    <span class="t-dim">— tempo online</span>',
@@ -388,17 +379,14 @@
     '    status    <span class="t-dim">— status do sistema</span>',
     '    neofetch  <span class="t-dim">— info do sistema</span>',
     '    clear     <span class="t-dim">— limpar tela</span>',
-    '',
     '  <span class="t-dim">help 3 → ???</span>',
   ].join('\n');
 
   var ABOUT_HELP_3 = [
-    '',
     '  <span class="t-ok">Easter eggs (3/3):</span>',
     '    <span class="t-glitch">▓░▒█▓░▒</span>  <span class="t-dim">— ???</span>',
     '    <span class="t-glitch">█▒░▓█▒░</span>  <span class="t-dim">— ???</span>',
     '    <span class="t-glitch">░▓█▒░▓█</span>  <span class="t-dim">— ???</span>',
-    '',
     '  <span class="t-pending">encontre os 3 comandos</span>',
     '  <span class="t-pending">secretos... boa sorte!</span>',
   ].join('\n');
