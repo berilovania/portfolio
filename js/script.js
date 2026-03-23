@@ -102,6 +102,8 @@
   var heroLastResp = null;
   var heroAnimHtml = '';
   var HERO_MAX     = 30;
+  var heroHistory  = [];
+  var heroHistIdx  = -1;
 
   var HERO_HELP_1 = [
     '  <span class="t-ok">Comandos (1/3):</span>',
@@ -206,6 +208,8 @@
     if (heroProc) return;
     var s = heroInput.trim();
     if (!s) { heroInput = ''; heroShowInteractive(); return; }
+    heroHistory.push(s);
+    heroHistIdx = -1;
     var lower = s.toLowerCase();
     if (lower === 'clear') {
       heroLastCmd = null; heroLastResp = null; heroAnimHtml = '';
@@ -357,6 +361,8 @@
   var aboutLastCmd  = null;
   var aboutLastResp = null;
   var aboutAnimHtml = '';
+  var aboutHistory  = [];
+  var aboutHistIdx  = -1;
 
   var ABOUT_HELP_1 = [
     '  <span class="t-ok">Comandos (1/3):</span>',
@@ -446,6 +452,8 @@
     if (aboutProc) return;
     var s = aboutInput.trim();
     if (!s) { aboutInput = ''; aboutShowInteractive(); return; }
+    aboutHistory.push(s);
+    aboutHistIdx = -1;
     var lower = s.toLowerCase();
     if (lower === 'clear') {
       aboutLastCmd = null; aboutLastResp = null; aboutAnimHtml = '';
@@ -579,6 +587,22 @@
 
     if (active === 'hero' && heroInteract && !heroProc) {
       if (e.key === 'Enter') { heroEnter(); }
+      else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (heroHistory.length > 0) {
+          if (heroHistIdx === -1) heroHistIdx = heroHistory.length;
+          if (heroHistIdx > 0) { heroHistIdx--; heroInput = heroHistory[heroHistIdx]; heroShowInteractive(); }
+        }
+      }
+      else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (heroHistIdx !== -1) {
+          heroHistIdx++;
+          if (heroHistIdx >= heroHistory.length) { heroHistIdx = -1; heroInput = ''; }
+          else { heroInput = heroHistory[heroHistIdx]; }
+          heroShowInteractive();
+        }
+      }
       else if (e.key === 'Backspace') { e.preventDefault(); heroInput = heroInput.slice(0, -1); heroShowInteractive(); }
       else if (e.key === ' ') { if (heroInput.length < HERO_MAX) { heroInput += ' '; heroShowInteractive(); } }
       else if (e.key.length === 1 && heroInput.length < HERO_MAX) { heroInput += e.key; heroShowInteractive(); }
@@ -586,6 +610,22 @@
 
     if (active === 'about' && aboutInteract && !aboutProc) {
       if (e.key === 'Enter') { aboutEnter(); }
+      else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (aboutHistory.length > 0) {
+          if (aboutHistIdx === -1) aboutHistIdx = aboutHistory.length;
+          if (aboutHistIdx > 0) { aboutHistIdx--; aboutInput = aboutHistory[aboutHistIdx]; aboutShowInteractive(); }
+        }
+      }
+      else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (aboutHistIdx !== -1) {
+          aboutHistIdx++;
+          if (aboutHistIdx >= aboutHistory.length) { aboutHistIdx = -1; aboutInput = ''; }
+          else { aboutInput = aboutHistory[aboutHistIdx]; }
+          aboutShowInteractive();
+        }
+      }
       else if (e.key === 'Backspace') { e.preventDefault(); aboutInput = aboutInput.slice(0, -1); aboutShowInteractive(); }
       else if (e.key === ' ') { if (aboutInput.length < 30) { aboutInput += ' '; aboutShowInteractive(); } }
       else if (e.key.length === 1 && aboutInput.length < 30) { aboutInput += e.key; aboutShowInteractive(); }

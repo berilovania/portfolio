@@ -422,7 +422,7 @@ ul {
 }
 
 .t-placeholder {
-  color: rgba(255, 238, 0, 0.685);
+  color: rgba(127, 255, 0, 0.85);
   font-style: italic;
   animation: placeholderPulse 2.5s ease-in-out infinite;
 }
@@ -1046,6 +1046,14 @@ ul {
 
   .about-highlights {
     gap: var(--spacing-md);
+  }
+
+  .contact-info {
+    text-align: center;
+  }
+
+  .contact-item {
+    justify-content: center;
   }
 
   .contact-form {
