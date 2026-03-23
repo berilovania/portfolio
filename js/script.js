@@ -557,14 +557,19 @@
 
   // ============================================================
   // 8. TECLADO UNIFICADO — roteia para o terminal clicado
+  //    Usa inputs ocultos para abrir teclado virtual no mobile
   // ============================================================
   var focusedTerminal = null;
+  var heroHiddenInput = document.getElementById('heroInput');
+  var aboutHiddenInput = document.getElementById('aboutInput');
 
   document.getElementById('heroTerminal').addEventListener('click', function () {
     focusedTerminal = 'hero';
+    heroHiddenInput.focus();
   });
   document.querySelector('.ascii-about').addEventListener('click', function () {
     focusedTerminal = 'about';
+    aboutHiddenInput.focus();
   });
   document.addEventListener('click', function (e) {
     if (!e.target.closest('#heroTerminal') && !e.target.closest('.ascii-about')) {
@@ -572,22 +577,14 @@
     }
   });
 
-  document.addEventListener('keydown', function (e) {
-    var tag = (document.activeElement && document.activeElement.tagName) || '';
-    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-
-    if (!focusedTerminal) return;
-
-    // Trava scroll por teclado apenas quando terminal está focado
+  function handleTerminalKeydown(e, which) {
     if (e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowUp'
         || e.key === 'PageDown' || e.key === 'PageUp') {
       e.preventDefault();
     }
 
-    var active = focusedTerminal;
-
-    if (active === 'hero' && heroInteract && !heroProc) {
-      if (e.key === 'Enter') { heroEnter(); }
+    if (which === 'hero' && heroInteract && !heroProc) {
+      if (e.key === 'Enter') { heroEnter(); heroHiddenInput.value = ''; }
       else if (e.key === 'ArrowUp') {
         e.preventDefault();
         if (heroHistory.length > 0) {
@@ -609,8 +606,8 @@
       else if (e.key.length === 1 && heroInput.length < HERO_MAX) { heroInput += e.key; heroShowInteractive(); }
     }
 
-    if (active === 'about' && aboutInteract && !aboutProc) {
-      if (e.key === 'Enter') { aboutEnter(); }
+    if (which === 'about' && aboutInteract && !aboutProc) {
+      if (e.key === 'Enter') { aboutEnter(); aboutHiddenInput.value = ''; }
       else if (e.key === 'ArrowUp') {
         e.preventDefault();
         if (aboutHistory.length > 0) {
@@ -631,6 +628,42 @@
       else if (e.key === ' ') { if (aboutInput.length < 30) { aboutInput += ' '; aboutShowInteractive(); } }
       else if (e.key.length === 1 && aboutInput.length < 30) { aboutInput += e.key; aboutShowInteractive(); }
     }
+  }
+
+  // Keydown nos inputs ocultos (mobile + desktop quando focado no input)
+  heroHiddenInput.addEventListener('keydown', function (e) { handleTerminalKeydown(e, 'hero'); });
+  aboutHiddenInput.addEventListener('keydown', function (e) { handleTerminalKeydown(e, 'about'); });
+
+  // Fallback: input event para mobile (alguns teclados virtuais não disparam keydown)
+  heroHiddenInput.addEventListener('input', function () {
+    if (!heroInteract || heroProc) { this.value = ''; return; }
+    var val = this.value;
+    if (val.length > 0) {
+      for (var i = 0; i < val.length; i++) {
+        if (heroInput.length < HERO_MAX) heroInput += val[i];
+      }
+      heroShowInteractive();
+    }
+    this.value = '';
+  });
+  aboutHiddenInput.addEventListener('input', function () {
+    if (!aboutInteract || aboutProc) { this.value = ''; return; }
+    var val = this.value;
+    if (val.length > 0) {
+      for (var i = 0; i < val.length; i++) {
+        if (aboutInput.length < 30) aboutInput += val[i];
+      }
+      aboutShowInteractive();
+    }
+    this.value = '';
+  });
+
+  // Desktop: keydown global (quando o input oculto NÃO está focado)
+  document.addEventListener('keydown', function (e) {
+    var tag = (document.activeElement && document.activeElement.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (!focusedTerminal) return;
+    handleTerminalKeydown(e, focusedTerminal);
   });
 
   // ============================================================

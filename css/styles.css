@@ -44,7 +44,7 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 17.6px;
 }
 
 body {
@@ -435,7 +435,18 @@ ul {
 /* ============================================================
    ASCII TERMINAL
    ============================================================ */
+.terminal-hidden-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: none;
+  pointer-events: none;
+}
+
 .ascii-terminal {
+  position: relative;
   background: rgba(5, 5, 12, 0.96);
   border: 1px solid rgba(124, 58, 237, 0.5);
   border-radius: var(--radius-md);
