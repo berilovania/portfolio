@@ -521,30 +521,44 @@
   var submitBtn    = document.getElementById('submitBtn');
   var formFeedback = document.getElementById('formFeedback');
 
+  var charCount = document.getElementById('charCount');
+  var messageEl = contactForm ? contactForm.querySelector('#message') : null;
+
+  if (messageEl && charCount) {
+    messageEl.addEventListener('input', function () {
+      charCount.textContent = this.value.length;
+      charCount.parentElement.classList.toggle('char-counter--warn', this.value.length > 450);
+    });
+  }
+
   if (contactForm) {
     contactForm.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      // Validação básica
-      var name    = contactForm.querySelector('#name').value.trim();
-      var email   = contactForm.querySelector('#email').value.trim();
-      var message = contactForm.querySelector('#message').value.trim();
-      var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      var nameEl    = contactForm.querySelector('#name');
+      var emailEl   = contactForm.querySelector('#email');
+      var msgEl     = contactForm.querySelector('#message');
+      var emailRe   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      var valid     = true;
 
-      if (!name || !email || !message) {
-        showFeedback('Por favor, preencha todos os campos.', 'error');
-        return;
-      }
-      if (!emailRe.test(email)) {
-        showFeedback('Informe um e-mail válido.', 'error');
+      // Limpa erros anteriores
+      [nameEl, emailEl, msgEl].forEach(function (el) { setFieldError(el, false); });
+      formFeedback.className = 'form-feedback';
+      formFeedback.textContent = '';
+
+      // Validação por campo
+      if (!nameEl.value.trim())            { setFieldError(nameEl, true);  valid = false; }
+      if (!emailRe.test(emailEl.value.trim())) { setFieldError(emailEl, true); valid = false; }
+      if (!msgEl.value.trim())             { setFieldError(msgEl, true);   valid = false; }
+
+      if (!valid) {
+        showFeedback('Preencha os campos destacados corretamente.', 'error');
         return;
       }
 
       // Estado de envio
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<ion-icon name="hourglass-outline"></ion-icon> Enviando...';
-      formFeedback.className = 'form-feedback';
-      formFeedback.textContent = '';
 
       fetch(contactForm.action, {
         method: 'POST',
@@ -555,6 +569,7 @@
         if (res.ok) {
           showFeedback('Mensagem enviada! Entrarei em contato em breve.', 'success');
           contactForm.reset();
+          if (charCount) charCount.textContent = '0';
         } else {
           showFeedback('Erro ao enviar. Tente novamente.', 'error');
         }
@@ -567,6 +582,16 @@
         submitBtn.innerHTML = '<ion-icon name="send-outline"></ion-icon> Enviar Mensagem';
       });
     });
+
+    // Remove destaque de erro ao começar a corrigir o campo
+    contactForm.querySelectorAll('input, textarea').forEach(function (el) {
+      el.addEventListener('input', function () { setFieldError(this, false); });
+    });
+  }
+
+  function setFieldError(el, hasError) {
+    if (!el) return;
+    el.classList.toggle('input--error', hasError);
   }
 
   function showFeedback(msg, type) {

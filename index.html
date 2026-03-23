@@ -506,6 +506,11 @@
         </div>
 
         <form class="contact-form glass-card" id="contactForm" action="https://formspree.io/f/xzdjngzj" method="POST" novalidate>
+          <!-- Honeypot anti-spam (invisível para humanos) -->
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+          <!-- Assunto personalizado no e-mail recebido -->
+          <input type="hidden" name="_subject" value="Novo contato via portfólio" />
+
           <div class="form-group">
             <label for="name">Nome</label>
             <input type="text" id="name" name="name" placeholder="Seu nome" required />
@@ -516,7 +521,8 @@
           </div>
           <div class="form-group">
             <label for="message">Mensagem</label>
-            <textarea id="message" name="message" rows="5" placeholder="Sua mensagem..." required></textarea>
+            <textarea id="message" name="message" rows="5" placeholder="Sua mensagem..." maxlength="500" required></textarea>
+            <div class="char-counter"><span id="charCount">0</span> / 500</div>
           </div>
           <div class="form-feedback" id="formFeedback" aria-live="polite"></div>
           <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
