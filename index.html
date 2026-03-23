@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Matheus S. Caldas — DevOps &amp; Cloud Engineer" />
-  <title>Matheus S. Caldas — DevOps &amp; Cloud Engineer</title>
+  <meta name="description" content="Matheus S. Caldas — DevOps" />
+  <title>Matheus S. Caldas — DevOps</title>
   <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
 
   <!-- Google Fonts -->
@@ -17,15 +17,33 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/effects.css" />
 </head>
 <body>
+
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress"></div>
+
+  <!-- Custom Cursor -->
+  <div class="custom-cursor-dot"></div>
+  <div class="custom-cursor-circle"></div>
+
+  <!-- Noise Overlay -->
+  <div class="noise-overlay">
+    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <filter id="noiseFilter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#noiseFilter)" opacity="1"/>
+    </svg>
+  </div>
 
   <!-- ============================================================
        NAVBAR
   ============================================================ -->
   <header id="navbar">
     <nav class="nav-container">
-      <a href="#hero" class="nav-logo">MS</a>
+      <a href="#hero" class="nav-logo">MC</a>
 
       <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
         <span></span>
@@ -46,6 +64,16 @@
        HERO
   ============================================================ -->
   <section id="hero">
+    <!-- Particle Canvas -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Gradient Orbs -->
+    <div class="hero-orbs">
+      <div class="hero-orb hero-orb--1"></div>
+      <div class="hero-orb hero-orb--2"></div>
+      <div class="hero-orb hero-orb--3"></div>
+    </div>
+
     <div class="hero-inner">
 
       <div class="hero-content">
@@ -91,10 +119,13 @@
     </div>
   </section>
 
+  <div class="section-divider"></div>
+
   <!-- ============================================================
        ABOUT
   ============================================================ -->
   <section id="about" class="section section-alt">
+    <canvas class="section-bg-canvas"></canvas>
     <div class="section-container">
 
       <div class="section-header fade-in">
@@ -138,10 +169,13 @@
     </div>
   </section>
 
+  <div class="section-divider"></div>
+
   <!-- ============================================================
        SKILLS
   ============================================================ -->
   <section id="skills" class="section">
+    <canvas class="section-bg-canvas"></canvas>
     <div class="section-container">
 
       <div class="section-header fade-in">
@@ -188,10 +222,13 @@
     </div>
   </section>
 
+  <div class="section-divider"></div>
+
   <!-- ============================================================
        PROJECTS
   ============================================================ -->
   <section id="projects" class="section section-alt">
+    <canvas class="section-bg-canvas"></canvas>
     <div class="section-container">
 
       <div class="section-header fade-in">
@@ -282,10 +319,13 @@
     </div>
   </section>
 
+  <div class="section-divider"></div>
+
   <!-- ============================================================
        CONTACT
   ============================================================ -->
   <section id="contact" class="section">
+    <canvas class="section-bg-canvas"></canvas>
     <div class="section-container">
 
       <div class="section-header fade-in">
@@ -368,8 +408,15 @@
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-  <!-- Script -->
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Scripts -->
   <script src="js/script.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/section-effects.js"></script>
+  <script src="js/effects.js"></script>
 
 </body>
 </html>

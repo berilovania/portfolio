@@ -126,7 +126,6 @@ ul {
 }
 
 .glass-card:hover {
-  transform: translateY(-6px);
   box-shadow: var(--shadow-card), var(--shadow-glow);
   border-color: rgba(124, 58, 237, 0.3);
 }
@@ -182,15 +181,10 @@ ul {
 /* ============================================================
    SCROLL ANIMATIONS
    ============================================================ */
+/* fade-in handled by GSAP ScrollTrigger in effects.js */
 .fade-in {
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 /* ============================================================

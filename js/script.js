@@ -60,17 +60,8 @@
   });
 
   // ============================================================
-  // 5. SCROLL ANIMATIONS — fade-in on scroll
+  // 5. SCROLL ANIMATIONS — handled by GSAP ScrollTrigger (effects.js)
   // ============================================================
-  var fadeObserver = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        fadeObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.fade-in').forEach(function (el) { fadeObserver.observe(el); });
 
   // ============================================================
   // TERMINAL UTILITIES
