@@ -86,157 +86,181 @@
   function buildBar(blocks) {
     var pct    = Math.round(blocks / 16 * 100);
     var pctStr = (String(pct) + '%').padStart(4);
-    return '│  <span class="t-bar">' + '█'.repeat(blocks) + '</span>'
-         + '<span class="t-dim">'    + '░'.repeat(16 - blocks) + '</span>'
-         + '  ' + pctStr + '           │\n';
+    return '<span class="t-bar">' + '█'.repeat(blocks) + '</span>'
+         + '<span class="t-dim">' + '░'.repeat(16 - blocks) + '</span>'
+         + ' ' + pctStr;
   }
-
-  var EMPTY = '│                                   │\n';
 
   // ============================================================
   // 6. HERO TERMINAL — devops@pipeline
   // ============================================================
-  var heroPre      = document.querySelector('.hero-visual .ascii-art');
+  var heroBody     = document.getElementById('heroBody');
   var heroHint     = document.querySelector('#hero .terminal-hint');
-  var heroLines    = [];
   var heroInteract = false;
   var heroInput    = '';
   var heroProc     = false;
-  var HERO_MAX     = 25;
+  var heroLastCmd  = null;
+  var heroLastResp = null;
+  var HERO_MAX     = 30;
 
-  if (heroPre) {
-    for (var i = 0; i < 13; i++) heroLines.push(EMPTY);
-  }
-
-  function renderHero() {
-    if (!heroPre) return;
-    heroPre.innerHTML =
-      '┌───────────────────────────────────┐\n' +
-      '│ <span class="t-dot-r">●</span> <span class="t-dot-y">●</span> <span class="t-dot-g">●</span>  devops@pipeline            │\n' +
-      '├───────────────────────────────────┤\n' +
-      heroLines.join('') +
-      '└───────────────────────────────────┘';
-  }
+  var HERO_HELP = [
+    '',
+    '  <span class="t-ok">Comandos disponíveis:</span>',
+    '    git push  <span class="t-dim">— deploy para produção</span>',
+    '    docker    <span class="t-dim">— status da imagem</span>',
+    '    kubectl   <span class="t-dim">— status dos pods</span>',
+    '    terraform <span class="t-dim">— plano de infra</span>',
+    '    whoami    <span class="t-dim">— quem sou eu</span>',
+    '    ls        <span class="t-dim">— listar arquivos</span>',
+    '    ping      <span class="t-dim">— testar conexão</span>',
+    '    devops    <span class="t-dim">— reiniciar animação</span>',
+    '    clear     <span class="t-dim">— limpar tela</span>',
+    '    help      <span class="t-dim">— mostrar ajuda</span>',
+  ].join('\n');
 
   function heroResponse(raw) {
     var cmd = raw.trim(), lower = cmd.toLowerCase();
     if (!cmd) return null;
-    if (lower.includes('sudo'))        return '> permissão negada (boa tentativa)';
-    if (lower.includes('rm'))          return '> rm: operação não permitida';
-    if (lower.includes('git push'))    return '> já em produção. pode relaxar :)';
-    if (lower.includes('git'))         return '> branch main. nada a commitar.';
-    if (lower.includes('terraform'))   return '> plano: 0 adicionado, 0 destruído';
-    if (lower.includes('kubectl'))     return '> pods: 3/3 rodando  ● ● ●';
-    if (lower.includes('docker'))      return '> imagem: latest  (atualizada)';
-    if (lower.includes('help'))        return '> tente: git push origin main';
-    if (lower.match(/\b(oi|olá|ola|hello|hi)\b/)) return '> oi! bem-vindo ao terminal :)';
-    if (lower.includes('ping'))        return '> pong (64 bytes, tempo=0.4ms)';
-    if (lower.includes('ls'))          return '> deploy.yml  src/  README.md';
-    if (lower.includes('whoami'))      return '> matheus — engenheiro devops';
-    if (lower.includes('clear'))       return '> os logs ficam. sempre.';
-    return ('> ' + escapeHtml(cmd.slice(0, 12)) + ': não encontrado').slice(0, 31);
+    if (lower === 'help')              return HERO_HELP;
+    if (lower.includes('sudo'))        return '  > permissão negada (boa tentativa)';
+    if (lower.includes('terraform'))   return '  > plano: 0 adicionado, 0 destruído';
+    if (lower.includes('rm'))          return '  > rm: operação não permitida';
+    if (lower.includes('git push'))    return '  > já em produção. relaxa :)';
+    if (lower.includes('git'))         return '  > branch main. nada a commitar.';
+    if (lower.includes('kubectl'))     return '  > pods: 3/3 rodando  ● ● ●';
+    if (lower.includes('docker'))      return '  > imagem: latest  (atualizada)';
+    if (lower === 'devops')            return 'DEVOPS_RESTART';
+    if (lower.match(/\b(oi|olá|ola|hello|hi)\b/)) return '  > oi! bem-vindo ao terminal :)\n  > sinta-se à vontade para \n    explorar os comandos! \n  > dica: tente "help"';
+    if (lower.includes('ping'))        return '  > pong (64 bytes, tempo=0.4ms)';
+    if (lower.includes('ls'))          return '  > deploy.yml  src/  README.md';
+    if (lower.includes('whoami'))      return '  > matheus — engenheiro devops';
+    return '  > ' + escapeHtml(cmd.slice(0, 20)) + ': não encontrado';
   }
 
-  function heroSetInput() {
-    var e = escapeHtml(heroInput);
-    var t = ' '.repeat(Math.max(0, 30 - heroInput.length));
-    heroLines[12] = '│  <span class="t-cmd">$ ' + e + '</span><span class="terminal-cursor">▮</span>' + t + '<span class="hero-comand-bar-align">│</span>\n';
-    renderHero();
+  function heroRender(html) {
+    if (heroBody) heroBody.innerHTML = html;
   }
 
-  function heroSetResp(resp) {
-    if (resp.length > 31) resp = resp.slice(0, 28) + '...';
-    heroLines[12] = '│  <span class="t-dim">' + resp + '</span>' + ' '.repeat(33 - resp.length) + '│\n';
-    renderHero();
+  function heroShowInteractive() {
+    var c = '';
+    if (heroLastCmd !== null) {
+      c += '<span class="t-cmd">$ ' + escapeHtml(heroLastCmd) + '</span>\n';
+      if (heroLastResp) c += heroLastResp + '\n';
+      c += '\n';
+    }
+    c += '<span class="t-cmd">$ ' + escapeHtml(heroInput) + '</span><span class="terminal-cursor">▮</span>';
+    heroRender(c);
   }
 
   function heroEnter() {
     if (heroProc) return;
     var s = heroInput.trim();
-    if (!s) { heroInput = ''; heroSetInput(); return; }
-    heroProc = true;
-    var r = heroResponse(s);
-    if (r) {
-      heroSetResp(r);
-      setTimeout(function () { heroInput = ''; heroProc = false; heroSetInput(); }, 2200);
+    if (!s) { heroInput = ''; heroShowInteractive(); return; }
+    var lower = s.toLowerCase();
+    if (lower === 'clear') {
+      heroLastCmd = null; heroLastResp = null;
     } else {
-      heroInput = ''; heroProc = false; heroSetInput();
+      var resp = heroResponse(s);
+      if (resp === 'DEVOPS_RESTART') {
+        heroInteract = false;
+        heroInput = '';
+        heroLastCmd = null;
+        heroLastResp = null;
+        if (heroHint) heroHint.classList.remove('visible');
+        runHeroAnim();
+        return;
+      }
+      heroLastCmd = s; heroLastResp = resp;
     }
+    heroInput = '';
+    heroShowInteractive();
   }
 
   async function runHeroAnim() {
-    renderHero();
-    await wait(700);
+    heroRender('');
+    await wait(500);
 
-    // Fase 1 — digita o comando
+    // Fase 1 — digita comando
     var cmd = 'git push origin main';
     for (var c = 0; c <= cmd.length; c++) {
-      var typed = cmd.slice(0, c);
-      heroLines[1] = '│  <span class="t-cmd">$ ' + typed + '</span>' + ' '.repeat(31 - typed.length) + '│\n';
-      renderHero();
+      heroRender('<span class="t-cmd">$ ' + cmd.slice(0, c) + '</span><span class="terminal-cursor">▮</span>');
       await wait(c === 0 ? 200 : 65);
     }
 
-    // Fase 2 — pipeline iniciado
+    // Fase 2 — pipeline iniciado + barra/pods iniciais
     await wait(250);
-    heroLines[2] = '│    ↳ pipeline iniciado            │\n';
-    renderHero();
+    var checks = [];
+    var barBlocks = 0;
+    var podCount = 0;
 
-    // Fase 3a — lint & test: contador 1/47 → 47/47
-    await wait(300);
+    function content() {
+      var l = ['<span class="t-cmd">$ ' + cmd + '</span>'];
+      l.push('  ↳ pipeline iniciado');
+      l.push('');
+      for (var i = 0; i < checks.length; i++) l.push(checks[i]);
+      if (checks.length > 0) l.push('');
+      l.push('  ' + buildBar(barBlocks));
+      if (podCount < 3) {
+        l.push('  <span class="t-pending">● ● ●</span>  <span class="t-pending">' + podCount + '/3 atualizando</span>');
+      } else {
+        l.push('  <span class="t-blue">● ● ●</span>  <span class="t-blue">3/3 pods rodando</span>');
+      }
+      return l.join('\n');
+    }
+
+    heroRender(content());
+    await wait(400);
+
+    // Fase 3a — lint & test: 1/47 → 47/47, barra 0→4
     for (var n = 1; n <= 47; n++) {
-      var cnt  = n + '/47';
-      var cpad = ' '.repeat(35 - 20 - cnt.length);
-      heroLines[4] = '│  [<span class="t-pending">…</span>] lint &amp; test   ' + cnt + cpad + '<span class="hero-t-ok-bar-align">│</span>\n';
-      renderHero();
+      checks[0] = '  [<span class="t-pending">…</span>] lint &amp; test   ' + n + '/47';
+      barBlocks = Math.round(n / 47 * 4);
+      heroRender(content());
       await wait(15);
     }
-    heroLines[4] = '│  [<span class="t-ok">✓</span>] lint &amp; test   47/47          <span class="hero-t-ok-bar-align">│</span>\n';
-    renderHero();
+    checks[0] = '  [<span class="t-ok">✓</span>] lint &amp; test   47/47';
+    barBlocks = 4;
+    podCount = 1;
+    heroRender(content());
 
-    // Fase 3b — docker build: contador 0.0s → 2.3s
+    // Fase 3b — docker build: 0.0s→2.3s, barra 4→8
     await wait(200);
     for (var d = 0; d <= 23; d++) {
-      var secs = (d / 10).toFixed(1) + 's';
-      var dpad = ' '.repeat(35 - 20 - secs.length);
-      heroLines[5] = '│  [<span class="t-pending">…</span>] docker build  ' + secs + dpad + '<span class="hero-t-ok-bar-align">│</span>\n';
-      renderHero();
-      await wait(60);
+      checks[1] = '  [<span class="t-pending">…</span>] docker build  ' + (d / 10).toFixed(1) + 's';
+      barBlocks = 4 + Math.round(d / 23 * 4);
+      heroRender(content());
+      await wait(55);
     }
-    heroLines[5] = '│  [<span class="t-ok">✓</span>] docker build  2.3s           <span class="hero-t-ok-bar-align">│</span>\n';
-    renderHero();
+    checks[1] = '  [<span class="t-ok">✓</span>] docker build  2.3s';
+    barBlocks = 8;
+    heroRender(content());
 
-    // Fase 3c — push to ECR
+    // Fase 3c — push to ECR, barra 8→12
     await wait(300);
-    heroLines[6] = '│  [<span class="t-ok">✓</span>] push to ECR   done           <span class="hero-t-ok-bar-align">│</span>\n';
-    renderHero();
+    checks[2] = '  [<span class="t-ok">✓</span>] push to ECR   done';
+    barBlocks = 12;
+    podCount = 2;
+    heroRender(content());
 
-    // Fase 3d — deploy k8s
+    // Fase 3d — deploy k8s, barra 12→16
     await wait(380);
-    heroLines[7] = '│  [<span class="t-ok">✓</span>] deploy k8s    prod           <span class="hero-t-ok-bar-align">│</span>\n';
-    renderHero();
+    checks[3] = '  [<span class="t-ok">✓</span>] deploy k8s    prod';
+    barBlocks = 16;
+    podCount = 3;
+    heroRender(content());
 
-    // Fase 4 — barra de progresso
-    await wait(250);
-    for (var b = 0; b <= 16; b++) {
-      heroLines[9] = buildBar(b);
-      renderHero();
-      await wait(b === 0 ? 0 : 75);
-    }
-
-    // Fase 5 — pods rodando
-    await wait(200);
-    heroLines[10] = '│  <span class="t-ok">● ● ●</span>  3/3 pods rodando          │\n';
-    renderHero();
-
-    // Modo interativo
-    await wait(400);
+    // Fase 4 — modo interativo
+    await wait(800);
     heroInteract = true;
-    heroSetInput();
+    heroLastCmd = null;
+    heroLastResp = null;
+    heroInput = '';
+    heroShowInteractive();
+
     if (heroHint) heroHint.classList.add('visible');
   }
 
-  if (heroPre) {
+  if (heroBody) {
     var heroTermObs = new IntersectionObserver(function (entries) {
       if (entries[0].isIntersecting) {
         heroTermObs.disconnect();
@@ -249,121 +273,149 @@
   // ============================================================
   // 7. ABOUT TERMINAL — cloud@terraform
   // ============================================================
-  var aboutPre      = document.querySelector('.about-image .ascii-art');
+  var aboutBody     = document.getElementById('aboutBody');
   var aboutHint     = document.querySelector('#about .terminal-hint');
-  var aboutLines    = [];
   var aboutInteract = false;
   var aboutInput    = '';
   var aboutProc     = false;
+  var aboutLastCmd  = null;
+  var aboutLastResp = null;
 
-  if (aboutPre) {
-    for (var j = 0; j < 13; j++) aboutLines.push(EMPTY);
-  }
-
-  function renderAbout() {
-    if (!aboutPre) return;
-    aboutPre.innerHTML =
-      '┌───────────────────────────────────┐\n' +
-      '│ <span class="t-dot-r">●</span> <span class="t-dot-y">●</span> <span class="t-dot-g">●</span>  cloud@terraform            │\n' +
-      '├───────────────────────────────────┤\n' +
-      aboutLines.join('') +
-      '└───────────────────────────────────┘';
-  }
+  var ABOUT_HELP = [
+    '',
+    '  <span class="t-ok">Comandos disponíveis:</span>',
+    '    terraform <span class="t-dim">— gerenciar infra</span>',
+    '    aws       <span class="t-dim">— status instâncias</span>',
+    '    kubectl   <span class="t-dim">— status dos pods</span>',
+    '    docker    <span class="t-dim">— status da imagem</span>',
+    '    whoami    <span class="t-dim">— quem sou eu</span>',
+    '    ls        <span class="t-dim">— listar arquivos</span>',
+    '    ping      <span class="t-dim">— testar conexão</span>',
+    '    devops    <span class="t-dim">— reiniciar animação</span>',
+    '    clear     <span class="t-dim">— limpar tela</span>',
+    '    help      <span class="t-dim">— mostrar ajuda</span>',
+  ].join('\n');
 
   function aboutResponse(raw) {
     var cmd = raw.trim(), lower = cmd.toLowerCase();
     if (!cmd) return null;
-    if (lower.includes('sudo'))            return '> permissão negada (boa tentativa)';
-    if (lower.includes('rm'))              return '> rm: operação não permitida';
-    if (lower.includes('git'))             return '> aqui usamos terraform :)';
-    if (lower.includes('terraform apply')) return '> 4 criados, 0 destruídos';
-    if (lower.includes('terraform plan'))  return '> plano: 4 a criar, 0 a destruir';
-    if (lower.includes('terraform'))       return '> recursos: 4 gerenciados';
-    if (lower.includes('aws'))             return '> 3 instâncias em us-east-1';
-    if (lower.includes('kubectl'))         return '> pods: 3/3 rodando  ● ● ●';
-    if (lower.includes('docker'))          return '> imagem: latest  (atualizada)';
-    if (lower.includes('help'))            return '> tente: terraform apply';
-    if (lower.match(/\b(oi|olá|ola|hello|hi)\b/)) return '> olá, engenheiro! tudo ok?';
-    if (lower.includes('ping'))            return '> pong (64 bytes, tempo=0.4ms)';
-    if (lower.includes('ls'))              return '> main.tf  vars.tf  outputs.tf';
-    if (lower.includes('whoami'))          return '> matheus — engenheiro devops';
-    if (lower.includes('clear'))           return '> os logs ficam. sempre.';
-    return ('> ' + escapeHtml(cmd.slice(0, 12)) + ': não encontrado').slice(0, 31);
+    if (lower === 'help')                      return ABOUT_HELP;
+    if (lower.includes('sudo'))                return '  > permissão negada (boa tentativa)';
+    if (lower.includes('terraform apply'))     return '  > 4 criados, 0 destruídos';
+    if (lower.includes('terraform plan'))      return '  > plano: 4 a criar, 0 a destruir';
+    if (lower.includes('terraform'))           return '  > recursos: 4 gerenciados';
+    if (lower.includes('rm'))                  return '  > rm: operação não permitida';
+    if (lower.includes('git'))                 return '  > aqui usamos terraform :)';
+    if (lower.includes('aws'))                 return '  > 3 instâncias em us-east-1';
+    if (lower.includes('kubectl'))             return '  > pods: 3/3 rodando  ● ● ●';
+    if (lower.includes('docker'))              return '  > imagem: latest  (atualizada)';
+    if (lower === 'devops')                    return 'DEVOPS_RESTART';
+    if (lower.match(/\b(oi|olá|ola|hello|hi)\b/)) return '  > olá, engenheiro(a)! tudo ok?\n  > sinta-se à vontade para \n    explorar os comandos! \n  > dica: tente "help"';
+    if (lower.includes('ping'))                return '  > pong (64 bytes, tempo=0.4ms)';
+    if (lower.includes('ls'))                  return '  > main.tf  vars.tf  outputs.tf';
+    if (lower.includes('whoami'))              return '  > matheus — engenheiro devops';
+    return '  > ' + escapeHtml(cmd.slice(0, 20)) + ': não encontrado';
   }
 
-  function aboutSetInput() {
-    var e = escapeHtml(aboutInput);
-    var t = ' '.repeat(Math.max(0, 30 - aboutInput.length));
-    aboutLines[12] = '│  <span class="t-cmd">$ ' + e + '</span><span class="terminal-cursor">▮</span>' + t + '<span class="comand-bar-align">│</span>\n';
-    renderAbout();
+  function aboutRender(html) {
+    if (aboutBody) aboutBody.innerHTML = html;
   }
 
-  function aboutSetResp(resp) {
-    if (resp.length > 31) resp = resp.slice(0, 28) + '...';
-    aboutLines[12] = '│  <span class="t-dim">' + resp + '</span>' + ' '.repeat(33 - resp.length) + '│\n';
-    renderAbout();
+  function aboutShowInteractive() {
+    var c = '';
+    if (aboutLastCmd !== null) {
+      c += '<span class="t-cmd">$ ' + escapeHtml(aboutLastCmd) + '</span>\n';
+      if (aboutLastResp) c += aboutLastResp + '\n';
+      c += '\n';
+    }
+    c += '<span class="t-cmd">$ ' + escapeHtml(aboutInput) + '</span><span class="terminal-cursor">▮</span>';
+    aboutRender(c);
   }
 
   function aboutEnter() {
     if (aboutProc) return;
     var s = aboutInput.trim();
-    if (!s) { aboutInput = ''; aboutSetInput(); return; }
-    aboutProc = true;
-    var r = aboutResponse(s);
-    if (r) {
-      aboutSetResp(r);
-      setTimeout(function () { aboutInput = ''; aboutProc = false; aboutSetInput(); }, 2200);
+    if (!s) { aboutInput = ''; aboutShowInteractive(); return; }
+    var lower = s.toLowerCase();
+    if (lower === 'clear') {
+      aboutLastCmd = null; aboutLastResp = null;
     } else {
-      aboutInput = ''; aboutProc = false; aboutSetInput();
+      var resp = aboutResponse(s);
+      if (resp === 'DEVOPS_RESTART') {
+        aboutInteract = false;
+        aboutInput = '';
+        aboutLastCmd = null;
+        aboutLastResp = null;
+        if (aboutHint) aboutHint.classList.remove('visible');
+        runAboutAnim();
+        return;
+      }
+      aboutLastCmd = s; aboutLastResp = resp;
     }
+    aboutInput = '';
+    aboutShowInteractive();
   }
 
   async function runAboutAnim() {
-    renderAbout();
+    aboutRender('');
     await wait(500);
 
     // Fase 1 — digita terraform apply
     var cmd = 'terraform apply';
     for (var c = 0; c <= cmd.length; c++) {
-      var typed = cmd.slice(0, c);
-      aboutLines[1] = '│  <span class="t-cmd">$ ' + typed + '</span>' + ' '.repeat(31 - typed.length) + '│\n';
-      renderAbout();
+      aboutRender('<span class="t-cmd">$ ' + cmd.slice(0, c) + '</span><span class="terminal-cursor">▮</span>');
       await wait(c === 0 ? 200 : 70);
     }
 
     // Fase 2 — planejando
     await wait(300);
-    aboutLines[2] = '│    ↳ planejando recursos...       │\n';
-    renderAbout();
+    var base = '<span class="t-cmd">$ ' + cmd + '</span>\n  ↳ planejando recursos...\n\n';
+    aboutRender(base);
+    await wait(500);
 
-    // Fase 3 — recursos criados um a um
-    await wait(400);
-    var res = [
-      '│  <span class="t-ok">+</span> aws_vpc.main        <span class="t-ok">criado</span>     │\n',
-      '│  <span class="t-ok">+</span> aws_subnet.pub      <span class="t-ok">criado</span>     │\n',
-      '│  <span class="t-ok">+</span> aws_instance.app    <span class="t-ok">criado</span>     │\n',
-      '│  <span class="t-ok">+</span> aws_s3.bucket       <span class="t-ok">criado</span>     │\n',
+    // Fase 3 — recursos com spinner + "criando..." animado
+    var resNames = [
+      'aws_vpc.main      ',
+      'aws_subnet.pub    ',
+      'aws_instance.app  ',
+      'aws_s3.bucket     ',
     ];
-    for (var r = 0; r < res.length; r++) {
-      aboutLines[4 + r] = res[r];
-      renderAbout();
-      await wait(350);
+    var resLines = [];
+    var spinChars = ['\\', '|', '/', '—'];
+
+    for (var r = 0; r < resNames.length; r++) {
+      // Spinner amarelo + "criando..." com pontos animados
+      for (var tick = 0; tick < 12; tick++) {
+        var spin    = spinChars[tick % 4];
+        var dotStr  = '.'.repeat((tick % 3) + 1);
+        var dotPad  = ' '.repeat(3 - dotStr.length);
+        resLines[r] = '  <span class="t-pending">' + spin + '</span> ' + resNames[r] + '<span class="t-pending">criando' + dotStr + '</span>' + dotPad;
+        aboutRender(base + resLines.join('\n'));
+        await wait(100);
+      }
+      // Muda para + verde e "criado"
+      resLines[r] = '  <span class="t-ok">+</span> ' + resNames[r] + '<span class="t-ok">criado</span>   ';
+      aboutRender(base + resLines.join('\n'));
+      await wait(200);
     }
 
     // Fase 4 — apply completo
     await wait(300);
-    aboutLines[9]  = '│  Apply complete!                  │\n';
-    aboutLines[10] = '│  4 criados, 0 alt., 0 destruídos  │\n';
-    renderAbout();
+    var final = base + resLines.join('\n') + '\n\n  Apply complete!\n  4 criados, 0 alt., 0 destruídos';
+    aboutRender(final);
 
-    // Modo interativo
-    await wait(500);
+    // Fase 5 — modo interativo
+    await wait(800);
     aboutInteract = true;
-    aboutSetInput();
+    aboutLastCmd = null;
+    aboutLastResp = null;
+    aboutInput = '';
+    aboutShowInteractive();
+
     if (aboutHint) aboutHint.classList.add('visible');
   }
 
-  if (aboutPre) {
+  if (aboutBody) {
     var aboutTermObs = new IntersectionObserver(function (entries) {
       if (entries[0].isIntersecting) {
         aboutTermObs.disconnect();
@@ -392,10 +444,10 @@
     var tag = (document.activeElement && document.activeElement.tagName) || '';
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
 
-    var anyActive = heroInteract || aboutInteract;
-    if (!anyActive) return;
+    var any = heroInteract || aboutInteract;
+    if (!any) return;
 
-    // Trava scroll por teclado enquanto terminal estiver ativo
+    // Trava scroll por teclado
     if (e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowUp'
         || e.key === 'PageDown' || e.key === 'PageUp') {
       e.preventDefault();
@@ -404,34 +456,36 @@
     var active = getActiveTerminal();
 
     if (active === 'hero' && heroInteract && !heroProc) {
-      if (e.key === 'Enter') {
-        heroEnter();
-      } else if (e.key === 'Backspace') {
-        e.preventDefault();
-        heroInput = heroInput.slice(0, -1);
-        heroSetInput();
-      } else if (e.key === ' ') {
-        if (heroInput.length < HERO_MAX) { heroInput += ' '; heroSetInput(); }
-      } else if (e.key.length === 1 && heroInput.length < HERO_MAX) {
-        heroInput += e.key;
-        heroSetInput();
-      }
+      if (e.key === 'Enter') { heroEnter(); }
+      else if (e.key === 'Backspace') { e.preventDefault(); heroInput = heroInput.slice(0, -1); heroShowInteractive(); }
+      else if (e.key === ' ') { if (heroInput.length < HERO_MAX) { heroInput += ' '; heroShowInteractive(); } }
+      else if (e.key.length === 1 && heroInput.length < HERO_MAX) { heroInput += e.key; heroShowInteractive(); }
     }
 
     if (active === 'about' && aboutInteract && !aboutProc) {
-      if (e.key === 'Enter') {
-        aboutEnter();
-      } else if (e.key === 'Backspace') {
-        e.preventDefault();
-        aboutInput = aboutInput.slice(0, -1);
-        aboutSetInput();
-      } else if (e.key === ' ') {
-        if (aboutInput.length < 25) { aboutInput += ' '; aboutSetInput(); }
-      } else if (e.key.length === 1 && aboutInput.length < 25) {
-        aboutInput += e.key;
-        aboutSetInput();
-      }
+      if (e.key === 'Enter') { aboutEnter(); }
+      else if (e.key === 'Backspace') { e.preventDefault(); aboutInput = aboutInput.slice(0, -1); aboutShowInteractive(); }
+      else if (e.key === ' ') { if (aboutInput.length < 30) { aboutInput += ' '; aboutShowInteractive(); } }
+      else if (e.key.length === 1 && aboutInput.length < 30) { aboutInput += e.key; aboutShowInteractive(); }
     }
   });
+
+  // ============================================================
+  // 9. EMAIL COPY
+  // ============================================================
+  var emailCopyEl = document.getElementById('emailCopy');
+  var copyToast   = document.getElementById('copyToast');
+
+  if (emailCopyEl) {
+    emailCopyEl.addEventListener('click', function () {
+      var email = this.getAttribute('data-email');
+      navigator.clipboard.writeText(email).then(function () {
+        if (copyToast) {
+          copyToast.classList.add('show');
+          setTimeout(function () { copyToast.classList.remove('show'); }, 2000);
+        }
+      });
+    });
+  }
 
 })();

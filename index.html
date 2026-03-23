@@ -63,7 +63,7 @@
         </div>
 
         <div class="hero-socials">
-          <a href="https://www.linkedin.com/in/matheus-santos-dev/" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-link">
+          <a href="https://www.linkedin.com/in/matheus-santos-c/" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-link">
             <ion-icon name="logo-linkedin"></ion-icon>
           </a>
           <a href="https://github.com/berilovania" target="_blank" rel="noopener" aria-label="GitHub" class="social-link">
@@ -77,25 +77,15 @@
 
       <div class="hero-visual">
         <div class="ascii-terminal" id="heroTerminal">
-<pre class="ascii-art">┌───────────────────────────────────┐
-│ <span class="t-dot-r">●</span> <span class="t-dot-y">●</span> <span class="t-dot-g">●</span>  devops@pipeline            │
-├───────────────────────────────────┤
-│                                   │
-│  <span class="t-cmd">$ git push origin main</span>           │
-│    ↳ pipeline triggered           │
-│                                   │
-│  [<span class="t-ok">✓</span>] lint &amp; test   47/47          │
-│  [<span class="t-ok">✓</span>] docker build  2.3s           │
-│  [<span class="t-ok">✓</span>] push to ECR   done           │
-│  [<span class="t-ok">✓</span>] deploy k8s    prod           │
-│                                   │
-│  <span class="t-bar">████████████████</span>  100%           │
-│  <span class="t-ok">● ● ●</span>  3/3 pods running          │
-│                                   │
-│  <span class="t-cmd">$</span> <span class="terminal-cursor">▮</span>                             <span class="hero-comand-bar-align">│</span>
-└───────────────────────────────────┘</pre>
+          <div class="terminal-titlebar">
+            <span class="t-dot-r">●</span>
+            <span class="t-dot-y">●</span>
+            <span class="t-dot-g">●</span>
+            <span class="terminal-title">devops@pipeline</span>
+          </div>
+          <pre class="terminal-body" id="heroBody"></pre>
         </div>
-        <p class="terminal-hint">// comece a digitar e pressione Enter ↵</p>
+        <p class="terminal-hint">// Digite oi e dê enter ↵</p>
       </div>
 
     </div>
@@ -147,25 +137,15 @@
         <div class="about-image fade-in">
           <div class="about-terminal-wrap">
             <div class="ascii-terminal ascii-about">
-<pre class="ascii-art">┌───────────────────────────────────┐
-│ <span class="t-dot-r">●</span> <span class="t-dot-y">●</span> <span class="t-dot-g">●</span>  cloud@terraform            │
-├───────────────────────────────────┤
-│                                   │
-│                                   │
-│                                   │
-│                                   │
-│                                   │
-│                                   │
-│                                   │
-│                                   │
-│                                   │
-│                                   │
-│                                   │
-│                                   │
-│                                   │
-└───────────────────────────────────┘</pre>
+              <div class="terminal-titlebar">
+                <span class="t-dot-r">●</span>
+                <span class="t-dot-y">●</span>
+                <span class="t-dot-g">●</span>
+                <span class="terminal-title">cloud@terraform</span>
+              </div>
+              <pre class="terminal-body" id="aboutBody"></pre>
             </div>
-            <p class="terminal-hint">// comece a digitar e pressione Enter ↵</p>
+            <p class="terminal-hint">// Digite oi e dê enter ↵</p>
           </div>
         </div>
 
@@ -402,12 +382,15 @@
 
           <div class="contact-item">
             <ion-icon name="mail-outline"></ion-icon>
-            <a href="mailto:matheus.santos.devops@gmail.com">matheus.santos.devops@gmail.com</a>
+            <span class="email-copy" id="emailCopy" data-email="matheus.santos.devops@gmail.com">
+              matheus.santos.devops@gmail.com
+              <ion-icon name="copy-outline" class="copy-icon"></ion-icon>
+            </span>
           </div>
 
           <div class="contact-item">
             <ion-icon name="logo-linkedin"></ion-icon>
-            <a href="https://www.linkedin.com/in/matheus-santos-dev/" target="_blank" rel="noopener">linkedin.com/in/matheus-santos-dev</a>
+            <a href="https://www.linkedin.com/in/matheus-santos-c/" target="_blank" rel="noopener">linkedin.com/in/matheus-santos-c</a>
           </div>
 
           <div class="contact-item">
@@ -448,7 +431,7 @@
         Feito por <span class="accent">Matheus Santos</span> &mdash; 2026
       </p>
       <div class="footer-socials">
-        <a href="https://www.linkedin.com/in/matheus-santos-dev/" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-link">
+        <a href="https://www.linkedin.com/in/matheus-santos-c/" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-link">
           <ion-icon name="logo-linkedin"></ion-icon>
         </a>
         <a href="https://github.com/berilovania" target="_blank" rel="noopener" aria-label="GitHub" class="social-link">
@@ -457,6 +440,8 @@
       </div>
     </div>
   </footer>
+
+  <div class="copy-toast" id="copyToast">E-mail copiado!</div>
 
   <!-- Ionicons -->
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
