@@ -422,7 +422,7 @@ ul {
 }
 
 .t-placeholder {
-  color: rgba(192, 96, 255, 0.5);
+  color: rgba(255, 238, 0, 0.685);
   font-style: italic;
   animation: placeholderPulse 2.5s ease-in-out infinite;
 }
