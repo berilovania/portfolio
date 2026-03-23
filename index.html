@@ -1,85 +1,469 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Matheus Santos</title>
-    <!-- favicon -->
-    <link rel="icon" href="images/favicon.png" type="image/png">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Matheus Santos — DevOps &amp; Cloud Engineer" />
+  <title>Matheus Santos | DevOps &amp; Cloud Engineer</title>
+  <link rel="icon" href="images/favicon.png" type="image/png" />
 
-    <!-- Devicons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"/>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/styles.css" />
+  <!-- Devicons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-    <main id="container">
-        <aside id="bio-container">
-            <h2>Matheus Santos</h2>
-            <img src="images/foto-perfil.png" alt="Foto de perfil de Matheus Santos" id="profile-image" />
-            <p>Olá! Meu nome é Matheus Santos e sou um <span class="highlight">DevOps Engineer</span>.</p>
-            <p id="welcome-text">Seja bem-vindo!</p>
-            <ul id="social-container">
-                <li>
-                    <a href="https://www.linkedin.com/in/matheus-santos-dev/" target="_blank"><ion-icon name="logo-linkedin"></ion-icon></a>
-                </li>
-                <li>
-                    <a href="https://github.com/berilovania" target="_blank"><ion-icon name="logo-github"></ion-icon></a>
-                </li>
-            </ul>
-            <div id="email-container">
-                <ion-icon name="mail-outline"></ion-icon>
-                <a href="mailto:matheus.santos.devops@gmail.com">matheus.santos.devops@gmail.com</a>
+
+  <!-- ============================================================
+       NAVBAR
+  ============================================================ -->
+  <header id="navbar">
+    <nav class="nav-container">
+      <a href="#hero" class="nav-logo">MS</a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about"    class="nav-link">Sobre</a></li>
+        <li><a href="#skills"   class="nav-link">Habilidades</a></li>
+        <li><a href="#projects" class="nav-link">Projetos</a></li>
+        <li><a href="#contact"  class="nav-link">Contato</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <section id="hero">
+    <div class="hero-inner">
+
+      <div class="hero-content">
+        <p class="hero-greeting">Olá, eu sou</p>
+        <h1 class="hero-name">Matheus Santos</h1>
+        <p class="hero-role">DevOps <span class="accent">&amp;</span> Cloud Engineer</p>
+        <p class="hero-description">
+          Apaixonado por automação, infraestrutura como código e soluções escaláveis na nuvem.
+          Transformando desafios complexos em pipelines elegantes e confiáveis.
+        </p>
+
+        <div class="hero-cta">
+          <a href="#projects" class="btn btn-primary">Ver Projetos</a>
+          <a href="#contact"  class="btn btn-outline">Fale Comigo</a>
+        </div>
+
+        <div class="hero-socials">
+          <a href="https://www.linkedin.com/in/matheus-santos-dev/" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-link">
+            <ion-icon name="logo-linkedin"></ion-icon>
+          </a>
+          <a href="https://github.com/berilovania" target="_blank" rel="noopener" aria-label="GitHub" class="social-link">
+            <ion-icon name="logo-github"></ion-icon>
+          </a>
+          <a href="mailto:matheus.santos.devops@gmail.com" aria-label="E-mail" class="social-link">
+            <ion-icon name="mail-outline"></ion-icon>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="ascii-terminal" id="heroTerminal">
+<pre class="ascii-art">┌───────────────────────────────────┐
+│ <span class="t-dot-r">●</span> <span class="t-dot-y">●</span> <span class="t-dot-g">●</span>  devops@pipeline            │
+├───────────────────────────────────┤
+│                                   │
+│  <span class="t-cmd">$ git push origin main</span>           │
+│    ↳ pipeline triggered           │
+│                                   │
+│  [<span class="t-ok">✓</span>] lint &amp; test   47/47          │
+│  [<span class="t-ok">✓</span>] docker build  2.3s           │
+│  [<span class="t-ok">✓</span>] push to ECR   done           │
+│  [<span class="t-ok">✓</span>] deploy k8s    prod           │
+│                                   │
+│  <span class="t-bar">████████████████</span>  100%           │
+│  <span class="t-ok">● ● ●</span>  3/3 pods running          │
+│                                   │
+│  <span class="t-cmd">$</span> <span class="terminal-cursor">▮</span>                             <span class="hero-comand-bar-align">│</span>
+└───────────────────────────────────┘</pre>
+        </div>
+        <p class="terminal-hint">// comece a digitar e pressione Enter ↵</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ABOUT
+  ============================================================ -->
+  <section id="about" class="section section-alt">
+    <div class="section-container">
+
+      <div class="section-header fade-in">
+        <span class="section-tag">// about</span>
+        <h2 class="section-title">Sobre Mim</h2>
+      </div>
+
+      <div class="about-grid">
+
+        <div class="about-text fade-in">
+          <p>
+            Sou um profissional apaixonado por tecnologia, com experiência em DevOps e Engenharia de Nuvem.
+            Tenho habilidades sólidas em automação de processos, gerenciamento de infraestrutura e
+            implementação de soluções em nuvem.
+          </p>
+          <p>
+            Estou sempre em busca de aprender novas tecnologias e aprimorar minhas habilidades para
+            entregar soluções eficientes e escaláveis. Acredito que boas práticas de DevOps são o
+            alicerce de sistemas resilientes e equipes produtivas.
+          </p>
+
+          <div class="about-highlights">
+            <div class="highlight-item">
+              <span class="highlight-number">2+</span>
+              <span class="highlight-label">Anos de Experiência</span>
             </div>
-        </aside>
-
-        <section id="about-container">
-            <h1 id="main-name">Matheus Santos</h1>
-            <p id="main-title">
-                <span class="highlight">DevOps</span> & <span class="highlight">Cloud</span> <span class="highlight">Engineer</span>
-            </p>
-            <p class="description">
-                Sou um profissional apaixonado por tecnologia, com experiência em DevOps e Engenharia de Nuvem. Tenho habilidades sólidas em automação de processos, gerenciamento de infraestrutura e implementação de soluções em nuvem.
-            </p>
-            <p class="description spaced">
-                Estou sempre em busca de aprender novas tecnologias e aprimorar minhas habilidades para entregar soluções eficientes e escaláveis.
-            </p>
-            <a href="https://github.com/berilovania" id="btn-projects"><ion-icon name="logo-github"></ion-icon> <span>Meus projetos</span></a>
-
-            <h2 id="skills-section-title">Habilidades</h2>
-            <p class="description">Conheça as tecnologias no qual domino:</p>
-
-            <div id="skills-container">
-                <div class="skills-box">
-                    <p class="skills-title">Front-End</p>
-                    <i class="devicon-html5-plain colored"></i>
-                    <i class="devicon-css3-plain colored"></i>
-                    <i class="devicon-javascript-plain colored"></i>
-                </div>
-                <div class="skills-box">
-                    <p class="skills-title">Cloud</p>
-                    <i class="devicon-docker-plain-wordmark colored"></i>
-                    <i class="devicon-amazonwebservices-plain-wordmark colored"></i>
-                    <i class="devicon-terraform-plain colored"></i>
-                    <i class="devicon-kubernetes-plain colored"></i>
-                </div>
-                <div class="skills-box">
-                    <p class="skills-title">DevOps Tools</p>
-                    <i class="devicon-linux-plain"></i>
-                    <i class="devicon-python-plain colored"></i>
-                    <i class="devicon-bash-plain"></i>
-                </div>
+            <div class="highlight-item">
+              <span class="highlight-number">10+</span>
+              <span class="highlight-label">Projetos Realizados</span>
             </div>
-        </section>
-    </main>
+            <div class="highlight-item">
+              <span class="highlight-number">5+</span>
+              <span class="highlight-label">Tecnologias Cloud</span>
+            </div>
+          </div>
 
-    <!-- Ionicons -->
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+          <a href="mailto:matheus.santos.devops@gmail.com" class="btn btn-primary">Entre em Contato</a>
+        </div>
+
+        <div class="about-image fade-in">
+          <div class="about-terminal-wrap">
+            <div class="ascii-terminal ascii-about">
+<pre class="ascii-art">┌───────────────────────────────────┐
+│ <span class="t-dot-r">●</span> <span class="t-dot-y">●</span> <span class="t-dot-g">●</span>  cloud@terraform            │
+├───────────────────────────────────┤
+│                                   │
+│                                   │
+│                                   │
+│                                   │
+│                                   │
+│                                   │
+│                                   │
+│                                   │
+│                                   │
+│                                   │
+│                                   │
+│                                   │
+│                                   │
+└───────────────────────────────────┘</pre>
+            </div>
+            <p class="terminal-hint">// comece a digitar e pressione Enter ↵</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SKILLS
+  ============================================================ -->
+  <section id="skills" class="section">
+    <div class="section-container">
+
+      <div class="section-header fade-in">
+        <span class="section-tag">// skills</span>
+        <h2 class="section-title">Habilidades &amp; Tecnologias</h2>
+      </div>
+
+      <div class="skills-grid fade-in">
+
+        <div class="skills-category">
+          <h3 class="skills-category-title">Cloud &amp; Infraestrutura</h3>
+          <div class="skills-pills">
+            <span class="skill-pill"><i class="devicon-amazonwebservices-plain-wordmark colored"></i> AWS</span>
+            <span class="skill-pill"><i class="devicon-terraform-plain colored"></i> Terraform</span>
+            <span class="skill-pill"><i class="devicon-kubernetes-plain colored"></i> Kubernetes</span>
+            <span class="skill-pill"><i class="devicon-docker-plain-wordmark colored"></i> Docker</span>
+          </div>
+        </div>
+
+        <div class="skills-category">
+          <h3 class="skills-category-title">DevOps &amp; Automação</h3>
+          <div class="skills-pills">
+            <span class="skill-pill"><i class="devicon-linux-plain"></i> Linux</span>
+            <span class="skill-pill"><i class="devicon-python-plain colored"></i> Python</span>
+            <span class="skill-pill"><i class="devicon-bash-plain"></i> Bash</span>
+          </div>
+        </div>
+
+        <div class="skills-category">
+          <h3 class="skills-category-title">Front-End</h3>
+          <div class="skills-pills">
+            <span class="skill-pill"><i class="devicon-html5-plain colored"></i> HTML5</span>
+            <span class="skill-pill"><i class="devicon-css3-plain colored"></i> CSS3</span>
+            <span class="skill-pill"><i class="devicon-javascript-plain colored"></i> JavaScript</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PROJECTS
+  ============================================================ -->
+  <section id="projects" class="section section-alt">
+    <div class="section-container">
+
+      <div class="section-header fade-in">
+        <span class="section-tag">// projects</span>
+        <h2 class="section-title">Projetos</h2>
+      </div>
+
+      <div class="projects-grid fade-in">
+
+        <article class="project-card glass-card">
+          <div class="project-card-header">
+            <span class="project-tag">DevOps</span>
+            <div class="project-links">
+              <a href="https://github.com/berilovania" target="_blank" rel="noopener" aria-label="GitHub" class="project-link">
+                <ion-icon name="logo-github"></ion-icon>
+              </a>
+              <a href="#" aria-label="Demo" class="project-link">
+                <ion-icon name="open-outline"></ion-icon>
+              </a>
+            </div>
+          </div>
+          <h3 class="project-title">Em Breve</h3>
+          <p class="project-description">
+            Projeto será adicionado em breve. Fique de olho no GitHub para as novidades!
+          </p>
+          <div class="project-stack">
+            <span class="stack-badge">AWS</span>
+            <span class="stack-badge">Docker</span>
+            <span class="stack-badge">Terraform</span>
+          </div>
+        </article>
+
+        <article class="project-card glass-card">
+          <div class="project-card-header">
+            <span class="project-tag">Cloud</span>
+            <div class="project-links">
+              <a href="https://github.com/berilovania" target="_blank" rel="noopener" aria-label="GitHub" class="project-link">
+                <ion-icon name="logo-github"></ion-icon>
+              </a>
+              <a href="#" aria-label="Demo" class="project-link">
+                <ion-icon name="open-outline"></ion-icon>
+              </a>
+            </div>
+          </div>
+          <h3 class="project-title">Em Breve</h3>
+          <p class="project-description">
+            Projeto será adicionado em breve. Fique de olho no GitHub para as novidades!
+          </p>
+          <div class="project-stack">
+            <span class="stack-badge">Kubernetes</span>
+            <span class="stack-badge">Python</span>
+            <span class="stack-badge">Linux</span>
+          </div>
+        </article>
+
+        <article class="project-card glass-card">
+          <div class="project-card-header">
+            <span class="project-tag">Automação</span>
+            <div class="project-links">
+              <a href="https://github.com/berilovania" target="_blank" rel="noopener" aria-label="GitHub" class="project-link">
+                <ion-icon name="logo-github"></ion-icon>
+              </a>
+              <a href="#" aria-label="Demo" class="project-link">
+                <ion-icon name="open-outline"></ion-icon>
+              </a>
+            </div>
+          </div>
+          <h3 class="project-title">Em Breve</h3>
+          <p class="project-description">
+            Projeto será adicionado em breve. Fique de olho no GitHub para as novidades!
+          </p>
+          <div class="project-stack">
+            <span class="stack-badge">Bash</span>
+            <span class="stack-badge">Python</span>
+            <span class="stack-badge">CI/CD</span>
+          </div>
+        </article>
+
+        <article class="project-card glass-card">
+          <div class="project-card-header">
+            <span class="project-tag">Infraestrutura</span>
+            <div class="project-links">
+              <a href="https://github.com/berilovania" target="_blank" rel="noopener" aria-label="GitHub" class="project-link">
+                <ion-icon name="logo-github"></ion-icon>
+              </a>
+              <a href="#" aria-label="Demo" class="project-link">
+                <ion-icon name="open-outline"></ion-icon>
+              </a>
+            </div>
+          </div>
+          <h3 class="project-title">Em Breve</h3>
+          <p class="project-description">
+            Projeto será adicionado em breve. Fique de olho no GitHub para as novidades!
+          </p>
+          <div class="project-stack">
+            <span class="stack-badge">Terraform</span>
+            <span class="stack-badge">AWS</span>
+            <span class="stack-badge">Docker</span>
+          </div>
+        </article>
+
+        <article class="project-card glass-card">
+          <div class="project-card-header">
+            <span class="project-tag">DevOps</span>
+            <div class="project-links">
+              <a href="https://github.com/berilovania" target="_blank" rel="noopener" aria-label="GitHub" class="project-link">
+                <ion-icon name="logo-github"></ion-icon>
+              </a>
+              <a href="#" aria-label="Demo" class="project-link">
+                <ion-icon name="open-outline"></ion-icon>
+              </a>
+            </div>
+          </div>
+          <h3 class="project-title">Em Breve</h3>
+          <p class="project-description">
+            Projeto será adicionado em breve. Fique de olho no GitHub para as novidades!
+          </p>
+          <div class="project-stack">
+            <span class="stack-badge">Kubernetes</span>
+            <span class="stack-badge">Helm</span>
+            <span class="stack-badge">AWS</span>
+          </div>
+        </article>
+
+        <article class="project-card glass-card">
+          <div class="project-card-header">
+            <span class="project-tag">Cloud</span>
+            <div class="project-links">
+              <a href="https://github.com/berilovania" target="_blank" rel="noopener" aria-label="GitHub" class="project-link">
+                <ion-icon name="logo-github"></ion-icon>
+              </a>
+              <a href="#" aria-label="Demo" class="project-link">
+                <ion-icon name="open-outline"></ion-icon>
+              </a>
+            </div>
+          </div>
+          <h3 class="project-title">Em Breve</h3>
+          <p class="project-description">
+            Projeto será adicionado em breve. Fique de olho no GitHub para as novidades!
+          </p>
+          <div class="project-stack">
+            <span class="stack-badge">Python</span>
+            <span class="stack-badge">Lambda</span>
+            <span class="stack-badge">S3</span>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="projects-cta fade-in">
+        <a href="https://github.com/berilovania" target="_blank" rel="noopener" class="btn btn-outline">
+          <ion-icon name="logo-github"></ion-icon>
+          Ver mais no GitHub
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTACT
+  ============================================================ -->
+  <section id="contact" class="section">
+    <div class="section-container">
+
+      <div class="section-header fade-in">
+        <span class="section-tag">// contact</span>
+        <h2 class="section-title">Vamos Conversar</h2>
+      </div>
+
+      <div class="contact-grid fade-in">
+
+        <div class="contact-info">
+          <p class="contact-intro">
+            Estou aberto a oportunidades nas áreas de DevOps e Cloud Engineering.
+            Sinta-se à vontade para entrar em contato — adoro discutir novos projetos e desafios tecnológicos!
+          </p>
+
+          <div class="contact-item">
+            <ion-icon name="mail-outline"></ion-icon>
+            <a href="mailto:matheus.santos.devops@gmail.com">matheus.santos.devops@gmail.com</a>
+          </div>
+
+          <div class="contact-item">
+            <ion-icon name="logo-linkedin"></ion-icon>
+            <a href="https://www.linkedin.com/in/matheus-santos-dev/" target="_blank" rel="noopener">linkedin.com/in/matheus-santos-dev</a>
+          </div>
+
+          <div class="contact-item">
+            <ion-icon name="logo-github"></ion-icon>
+            <a href="https://github.com/berilovania" target="_blank" rel="noopener">github.com/berilovania</a>
+          </div>
+        </div>
+
+        <form class="contact-form glass-card" id="contactForm" novalidate>
+          <div class="form-group">
+            <label for="name">Nome</label>
+            <input type="text" id="name" name="name" placeholder="Seu nome" required />
+          </div>
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" placeholder="seu@email.com" required />
+          </div>
+          <div class="form-group">
+            <label for="message">Mensagem</label>
+            <textarea id="message" name="message" rows="5" placeholder="Sua mensagem..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">
+            <ion-icon name="send-outline"></ion-icon>
+            Enviar Mensagem
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer id="footer">
+    <div class="footer-container">
+      <p class="footer-text">
+        Feito por <span class="accent">Matheus Santos</span> &mdash; 2026
+      </p>
+      <div class="footer-socials">
+        <a href="https://www.linkedin.com/in/matheus-santos-dev/" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-link">
+          <ion-icon name="logo-linkedin"></ion-icon>
+        </a>
+        <a href="https://github.com/berilovania" target="_blank" rel="noopener" aria-label="GitHub" class="social-link">
+          <ion-icon name="logo-github"></ion-icon>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Ionicons -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <!-- Script -->
+  <script src="js/script.js"></script>
+
 </body>
 </html>
