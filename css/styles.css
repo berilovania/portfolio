@@ -644,26 +644,11 @@ ul {
 /* ============================================================
    PROJECTS
    ============================================================ */
-/* Sub-seção (Projetos / Labs) */
-.projects-subsection {
-  margin-bottom: var(--spacing-2xl);
-}
-
-.projects-subsection-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: var(--spacing-lg);
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--color-border);
-}
-
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
 }
 
 .project-card-link {
@@ -726,6 +711,9 @@ ul {
 
 /* Tag padrão (roxo) */
 .project-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--color-accent);
@@ -735,6 +723,12 @@ ul {
   border-radius: var(--radius-full);
   text-transform: uppercase;
   letter-spacing: 0.07em;
+}
+
+.tag-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
 }
 
 /* Tag LAB (verde) */
