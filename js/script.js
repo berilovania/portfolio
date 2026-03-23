@@ -101,6 +101,7 @@
   var heroProc     = false;
   var heroLastCmd  = null;
   var heroLastResp = null;
+  var heroAnimHtml = '';
   var HERO_MAX     = 30;
 
   var HERO_HELP = [
@@ -142,7 +143,7 @@
   }
 
   function heroShowInteractive() {
-    var c = '';
+    var c = heroAnimHtml;
     if (heroLastCmd !== null) {
       c += '<span class="t-cmd">$ ' + escapeHtml(heroLastCmd) + '</span>\n';
       if (heroLastResp) c += heroLastResp + '\n';
@@ -158,7 +159,7 @@
     if (!s) { heroInput = ''; heroShowInteractive(); return; }
     var lower = s.toLowerCase();
     if (lower === 'clear') {
-      heroLastCmd = null; heroLastResp = null;
+      heroLastCmd = null; heroLastResp = null; heroAnimHtml = '';
     } else {
       var resp = heroResponse(s);
       if (resp === 'DEVOPS_RESTART') {
@@ -166,6 +167,7 @@
         heroInput = '';
         heroLastCmd = null;
         heroLastResp = null;
+        heroAnimHtml = '';
         if (heroHint) heroHint.classList.remove('visible');
         runHeroAnim();
         return;
@@ -251,6 +253,7 @@
 
     // Fase 4 — modo interativo
     await wait(800);
+    heroAnimHtml = content() + '\n\n';
     heroInteract = true;
     heroLastCmd = null;
     heroLastResp = null;
@@ -280,6 +283,7 @@
   var aboutProc     = false;
   var aboutLastCmd  = null;
   var aboutLastResp = null;
+  var aboutAnimHtml = '';
 
   var ABOUT_HELP = [
     '',
@@ -322,7 +326,7 @@
   }
 
   function aboutShowInteractive() {
-    var c = '';
+    var c = aboutAnimHtml;
     if (aboutLastCmd !== null) {
       c += '<span class="t-cmd">$ ' + escapeHtml(aboutLastCmd) + '</span>\n';
       if (aboutLastResp) c += aboutLastResp + '\n';
@@ -338,7 +342,7 @@
     if (!s) { aboutInput = ''; aboutShowInteractive(); return; }
     var lower = s.toLowerCase();
     if (lower === 'clear') {
-      aboutLastCmd = null; aboutLastResp = null;
+      aboutLastCmd = null; aboutLastResp = null; aboutAnimHtml = '';
     } else {
       var resp = aboutResponse(s);
       if (resp === 'DEVOPS_RESTART') {
@@ -346,6 +350,7 @@
         aboutInput = '';
         aboutLastCmd = null;
         aboutLastResp = null;
+        aboutAnimHtml = '';
         if (aboutHint) aboutHint.classList.remove('visible');
         runAboutAnim();
         return;
@@ -406,6 +411,7 @@
 
     // Fase 5 — modo interativo
     await wait(800);
+    aboutAnimHtml = final + '\n\n';
     aboutInteract = true;
     aboutLastCmd = null;
     aboutLastResp = null;
