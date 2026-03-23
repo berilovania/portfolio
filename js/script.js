@@ -143,11 +143,13 @@
   }
 
   function heroShowInteractive() {
-    var c = heroAnimHtml;
+    var c = '';
     if (heroLastCmd !== null) {
       c += '<span class="t-cmd">$ ' + escapeHtml(heroLastCmd) + '</span>\n';
       if (heroLastResp) c += heroLastResp + '\n';
       c += '\n';
+    } else {
+      c += heroAnimHtml;
     }
     c += '<span class="t-cmd">$ ' + escapeHtml(heroInput) + '</span><span class="terminal-cursor">▮</span>';
     heroRender(c);
@@ -326,11 +328,13 @@
   }
 
   function aboutShowInteractive() {
-    var c = aboutAnimHtml;
+    var c = '';
     if (aboutLastCmd !== null) {
       c += '<span class="t-cmd">$ ' + escapeHtml(aboutLastCmd) + '</span>\n';
       if (aboutLastResp) c += aboutLastResp + '\n';
       c += '\n';
+    } else {
+      c += aboutAnimHtml;
     }
     c += '<span class="t-cmd">$ ' + escapeHtml(aboutInput) + '</span><span class="terminal-cursor">▮</span>';
     aboutRender(c);
