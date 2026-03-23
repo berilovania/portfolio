@@ -95,7 +95,6 @@
   // 6. HERO TERMINAL — devops@pipeline
   // ============================================================
   var heroBody     = document.getElementById('heroBody');
-  var heroHint     = document.querySelector('#hero .terminal-hint');
   var heroInteract = false;
   var heroInput    = '';
   var heroProc     = false;
@@ -152,6 +151,9 @@
       c += heroAnimHtml;
     }
     c += '<span class="t-cmd">$ ' + escapeHtml(heroInput) + '</span><span class="terminal-cursor">▮</span>';
+    if (!heroInput && heroLastCmd === null) {
+      c += '  <span class="t-placeholder">// Digite oi e dê enter ↵</span>';
+    }
     heroRender(c);
   }
 
@@ -170,7 +172,6 @@
         heroLastCmd = null;
         heroLastResp = null;
         heroAnimHtml = '';
-        if (heroHint) heroHint.classList.remove('visible');
         runHeroAnim();
         return;
       }
@@ -239,15 +240,28 @@
     barBlocks = 8;
     heroRender(content());
 
-    // Fase 3c — push to ECR, barra 8→12
-    await wait(300);
+    // Fase 3c — push to ECR: 0%→100%, barra 8→12
+    await wait(200);
+    for (var p = 0; p <= 10; p++) {
+      var pPct = p * 10;
+      checks[2] = '  [<span class="t-pending">…</span>] push to ECR   ' + pPct + '%';
+      barBlocks = 8 + Math.round(p / 10 * 4);
+      heroRender(content());
+      await wait(60);
+    }
     checks[2] = '  [<span class="t-ok">✓</span>] push to ECR   done';
     barBlocks = 12;
     podCount = 2;
     heroRender(content());
 
-    // Fase 3d — deploy k8s, barra 12→16
-    await wait(380);
+    // Fase 3d — deploy k8s: 0/3→3/3, barra 12→16
+    await wait(200);
+    for (var k = 0; k <= 3; k++) {
+      checks[3] = '  [<span class="t-pending">…</span>] deploy k8s    ' + k + '/3';
+      barBlocks = 12 + Math.round(k / 3 * 4);
+      heroRender(content());
+      await wait(180);
+    }
     checks[3] = '  [<span class="t-ok">✓</span>] deploy k8s    prod';
     barBlocks = 16;
     podCount = 3;
@@ -261,8 +275,6 @@
     heroLastResp = null;
     heroInput = '';
     heroShowInteractive();
-
-    if (heroHint) heroHint.classList.add('visible');
   }
 
   if (heroBody) {
@@ -279,7 +291,6 @@
   // 7. ABOUT TERMINAL — cloud@terraform
   // ============================================================
   var aboutBody     = document.getElementById('aboutBody');
-  var aboutHint     = document.querySelector('#about .terminal-hint');
   var aboutInteract = false;
   var aboutInput    = '';
   var aboutProc     = false;
@@ -337,6 +348,9 @@
       c += aboutAnimHtml;
     }
     c += '<span class="t-cmd">$ ' + escapeHtml(aboutInput) + '</span><span class="terminal-cursor">▮</span>';
+    if (!aboutInput && aboutLastCmd === null) {
+      c += '  <span class="t-placeholder">// Digite oi e dê enter ↵</span>';
+    }
     aboutRender(c);
   }
 
@@ -355,7 +369,6 @@
         aboutLastCmd = null;
         aboutLastResp = null;
         aboutAnimHtml = '';
-        if (aboutHint) aboutHint.classList.remove('visible');
         runAboutAnim();
         return;
       }
@@ -367,20 +380,20 @@
 
   async function runAboutAnim() {
     aboutRender('');
-    await wait(500);
+    await wait(300);
 
     // Fase 1 — digita terraform apply
     var cmd = 'terraform apply';
     for (var c = 0; c <= cmd.length; c++) {
       aboutRender('<span class="t-cmd">$ ' + cmd.slice(0, c) + '</span><span class="terminal-cursor">▮</span>');
-      await wait(c === 0 ? 200 : 70);
+      await wait(c === 0 ? 150 : 50);
     }
 
     // Fase 2 — planejando
-    await wait(300);
+    await wait(200);
     var base = '<span class="t-cmd">$ ' + cmd + '</span>\n  ↳ planejando recursos...\n\n';
     aboutRender(base);
-    await wait(500);
+    await wait(350);
 
     // Fase 3 — recursos com spinner + "criando..." animado
     var resNames = [
@@ -393,36 +406,32 @@
     var spinChars = ['\\', '|', '/', '—'];
 
     for (var r = 0; r < resNames.length; r++) {
-      // Spinner amarelo + "criando..." com pontos animados
-      for (var tick = 0; tick < 12; tick++) {
+      for (var tick = 0; tick < 8; tick++) {
         var spin    = spinChars[tick % 4];
         var dotStr  = '.'.repeat((tick % 3) + 1);
         var dotPad  = ' '.repeat(3 - dotStr.length);
         resLines[r] = '  <span class="t-pending">' + spin + '</span> ' + resNames[r] + '<span class="t-pending">criando' + dotStr + '</span>' + dotPad;
         aboutRender(base + resLines.join('\n'));
-        await wait(100);
+        await wait(70);
       }
-      // Muda para + verde e "criado"
       resLines[r] = '  <span class="t-ok">+</span> ' + resNames[r] + '<span class="t-ok">criado</span>   ';
       aboutRender(base + resLines.join('\n'));
-      await wait(200);
+      await wait(120);
     }
 
     // Fase 4 — apply completo
-    await wait(300);
+    await wait(200);
     var final = base + resLines.join('\n') + '\n\n  Apply complete!\n  4 criados, 0 alt., 0 destruídos';
     aboutRender(final);
 
     // Fase 5 — modo interativo
-    await wait(800);
+    await wait(600);
     aboutAnimHtml = final + '\n\n';
     aboutInteract = true;
     aboutLastCmd = null;
     aboutLastResp = null;
     aboutInput = '';
     aboutShowInteractive();
-
-    if (aboutHint) aboutHint.classList.add('visible');
   }
 
   if (aboutBody) {

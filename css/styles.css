@@ -421,28 +421,15 @@ ul {
   gap: 0.6rem;
 }
 
-.terminal-hint {
-  font-family: 'Courier New', monospace;
-  font-size: 0.72rem;
-  color: #c060ff;
-  letter-spacing: 0.05em;
-  opacity: 0;
-  pointer-events: none;
+.t-placeholder {
+  color: rgba(192, 96, 255, 0.5);
+  font-style: italic;
+  animation: placeholderPulse 2.5s ease-in-out infinite;
 }
 
-.terminal-hint.visible {
-  animation: hintPulse 2.5s ease-in-out infinite;
-}
-
-@keyframes hintPulse {
-  0%, 100% {
-    opacity: 0.55;
-    text-shadow: 0 0 6px rgba(180, 79, 255, 0.3);
-  }
-  50% {
-    opacity: 1;
-    text-shadow: 0 0 14px rgba(192, 96, 255, 0.95), 0 0 30px rgba(124, 58, 237, 0.55);
-  }
+@keyframes placeholderPulse {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 0.9; }
 }
 
 /* ============================================================
