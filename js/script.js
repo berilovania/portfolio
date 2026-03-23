@@ -152,7 +152,10 @@
     if (lower === 'help 2')            return HERO_HELP_2;
     if (lower === 'help 3')            return HERO_HELP_3;
     if (lower.includes('sudo'))        return '  > permissão negada (boa tentativa)\n  <span class="t-dim">dica: tente invadir de outro jeito...</span>';
-    if (lower.includes('terraform'))   return '  > plano: 0 adicionado, 0 destruído';
+    if (lower.includes('terraform apply'))  return '  > 4 criados, 0 destruídos';
+    if (lower.includes('terraform plan'))   return '  > plano: 4 a criar, 0 a destruir';
+    if (lower.includes('terraform'))        return '  > recursos: 4 gerenciados\n  <span class="t-dim">recurso #42: classificado</span>';
+    if (lower.includes('aws'))              return '  > 3 instâncias em us-east-1\n  <span class="t-dim">instância secreta: i-1337hack</span>';
     if (lower.includes('rm'))          return '  > rm: operação não permitida';
     if (lower.includes('git push'))    return '  > já em produção. relaxa :)';
     if (lower.includes('git'))         return '  > branch main. nada a commitar.';
@@ -216,12 +219,7 @@
     } else {
       var resp = heroResponse(s);
       if (resp === 'DEVOPS_RESTART') {
-        heroInteract = false;
-        heroInput = '';
-        heroLastCmd = null;
-        heroLastResp = null;
-        heroAnimHtml = '';
-        runHeroAnim();
+        pickAndRunHeroAnim();
         return;
       }
       if (resp && resp.startsWith('GLITCH_')) {
@@ -345,165 +343,30 @@
     var heroTermObs = new IntersectionObserver(function (entries) {
       if (entries[0].isIntersecting) {
         heroTermObs.disconnect();
-        runHeroAnim();
+        pickAndRunHeroAnim();
       }
     }, { threshold: 0.25 });
     heroTermObs.observe(document.getElementById('hero'));
   }
 
   // ============================================================
-  // 7. ABOUT TERMINAL — cloud@terraform
+  // 7. TERRAFORM ANIMATION — reused in hero terminal
   // ============================================================
-  var aboutBody     = document.getElementById('aboutBody');
-  var aboutInteract = false;
-  var aboutInput    = '';
-  var aboutProc     = false;
-  var aboutLastCmd  = null;
-  var aboutLastResp = null;
-  var aboutAnimHtml = '';
-  var aboutHistory  = [];
-  var aboutHistIdx  = -1;
-
-  var ABOUT_HELP_1 = [
-    '  <span class="t-ok">Comandos (1/3):</span>',
-    '    terraform <span class="t-dim">— gerenciar infra</span>',
-    '    aws       <span class="t-dim">— status instâncias</span>',
-    '    kubectl   <span class="t-dim">— status dos pods</span>',
-    '    docker    <span class="t-dim">— status da imagem</span>',
-    '    whoami    <span class="t-dim">— quem sou eu</span>',
-    '    ls        <span class="t-dim">— listar arquivos</span>',
-    '    ping      <span class="t-dim">— testar conexão</span>',
-    '  <span class="t-dim">help 2 → mais comandos</span>',
-  ].join('\n');
-
-  var ABOUT_HELP_2 = [
-    '  <span class="t-ok">Comandos (2/3):</span>',
-    '    devops    <span class="t-dim">— reiniciar animação</span>',
-    '    date      <span class="t-dim">— data e hora atual</span>',
-    '    uptime    <span class="t-dim">— tempo online</span>',
-    '    cat       <span class="t-dim">— ler arquivo</span>',
-    '    status    <span class="t-dim">— status do sistema</span>',
-    '    neofetch  <span class="t-dim">— info do sistema</span>',
-    '    clear     <span class="t-dim">— limpar tela</span>',
-    '  <span class="t-dim">help 3 → ???</span>',
-  ].join('\n');
-
-  var ABOUT_HELP_3 = [
-    '  <span class="t-ok">Easter eggs (3/3):</span>',
-    '    <span class="t-glitch">▓░▒█▓░▒</span>  <span class="t-dim">— ???</span>',
-    '    <span class="t-glitch">█▒░▓█▒░</span>  <span class="t-dim">— ???</span>',
-    '    <span class="t-glitch">░▓█▒░▓█</span>  <span class="t-dim">— ???</span>',
-    '  <span class="t-pending">encontre os 3 comandos</span>',
-    '  <span class="t-pending">secretos... boa sorte!</span>',
-  ].join('\n');
-
-  function aboutResponse(raw) {
-    var cmd = raw.trim(), lower = cmd.toLowerCase();
-    if (!cmd) return null;
-    if (lower === 'help' || lower === 'help 1') return ABOUT_HELP_1;
-    if (lower === 'help 2')                    return ABOUT_HELP_2;
-    if (lower === 'help 3')                    return ABOUT_HELP_3;
-    if (lower.includes('sudo'))                return '  > permissão negada (boa tentativa)\n  <span class="t-dim">dica: tente invadir de outro jeito...</span>';
-    if (lower.includes('terraform apply'))     return '  > 4 criados, 0 destruídos';
-    if (lower.includes('terraform plan'))      return '  > plano: 4 a criar, 0 a destruir';
-    if (lower.includes('terraform'))           return '  > recursos: 4 gerenciados\n  <span class="t-dim">recurso #42: classificado</span>';
-    if (lower.includes('rm'))                  return '  > rm: operação não permitida';
-    if (lower.includes('git'))                 return '  > aqui usamos terraform :)';
-    if (lower.includes('aws'))                 return '  > 3 instâncias em us-east-1\n  <span class="t-dim">instância secreta: i-1337hack</span>';
-    if (lower.includes('kubectl'))             return '  > pods: 3/3 rodando  ● ● ●\n  <span class="t-dim">pod-42 respondeu algo estranho...</span>';
-    if (lower.includes('docker'))              return '  > imagem: latest  (atualizada)';
-    if (lower === 'devops')                    return 'DEVOPS_RESTART';
-    if (lower === 'date')                      return '  > ' + new Date().toLocaleString('pt-BR');
-    if (lower === 'uptime')                    return '  > online há ' + Math.floor(performance.now() / 1000) + 's\n  <span class="t-dim">tempo suficiente pra ver a matrix?</span>';
-    if (lower === 'cat')                       return '  > 🐱 miau! (esperava um arquivo?)';
-    if (lower === 'status')                    return '  > cpu: 12%  mem: 4.2GB/16GB\n  > disk: 47% usado\n  > <span class="t-ok">todos os serviços ok</span>\n  <span class="t-dim">porta 1337: conexão suspeita...</span>';
-    if (lower === 'neofetch')                  return '  > <span class="t-ok">matheus</span>@portfolio\n  > OS: DevOps Linux 4.2\n  > Shell: bash 5.1\n  > Uptime: ∞\n  > Stack: AWS + K8s + Terraform';
-    if (lower === 'matrix')                    return 'GLITCH_MATRIX';
-    if (lower === 'hack')                      return 'GLITCH_HACK';
-    if (lower === '42')                        return 'GLITCH_42';
-    if (lower.match(/\b(oi|olá|ola|hello|hi)\b/)) return '  > olá, engenheiro(a)! tudo ok?\n  > sinta-se à vontade para \n    explorar os comandos! \n  > dica: tente "help"';
-    if (lower.includes('ping'))                return '  > pong (64 bytes, tempo=0.4ms)\n  <span class="t-dim">resposta vinda de... Nebuchadnezzar?</span>';
-    if (lower.includes('ls'))                  return '  > main.tf  vars.tf  outputs.tf\n  <span class="t-dim">.secret_42  (permissão negada)</span>';
-    if (lower.includes('whoami'))              return '  > matheus — engenheiro devops';
-    return '  > ' + escapeHtml(cmd.slice(0, 20)) + ': não encontrado';
-  }
-
-  function aboutRender(html) {
-    if (aboutBody) aboutBody.innerHTML = html;
-  }
-
-  function aboutShowInteractive() {
-    var c = '';
-    if (aboutLastCmd !== null) {
-      c += '<span class="t-cmd">$ ' + escapeHtml(aboutLastCmd) + '</span>\n';
-      if (aboutLastResp) c += aboutLastResp + '\n';
-      c += '\n';
-    } else {
-      c += aboutAnimHtml;
-    }
-    c += '<span class="t-cmd">$ ' + escapeHtml(aboutInput) + '</span><span class="terminal-cursor">▮</span>';
-    if (!aboutInput && aboutLastCmd === null) {
-      c += '  <span class="t-placeholder">// Digite oi e dê enter ↵</span>';
-    }
-    aboutRender(c);
-  }
-
-  function aboutEnter() {
-    if (aboutProc) return;
-    var s = aboutInput.trim();
-    if (!s) { aboutInput = ''; aboutShowInteractive(); return; }
-    aboutHistory.push(s);
-    aboutHistIdx = -1;
-    var lower = s.toLowerCase();
-    if (lower === 'clear') {
-      aboutLastCmd = null; aboutLastResp = null; aboutAnimHtml = '';
-    } else {
-      var resp = aboutResponse(s);
-      if (resp === 'DEVOPS_RESTART') {
-        aboutInteract = false;
-        aboutInput = '';
-        aboutLastCmd = null;
-        aboutLastResp = null;
-        aboutAnimHtml = '';
-        runAboutAnim();
-        return;
-      }
-      if (resp && resp.startsWith('GLITCH_')) {
-        aboutProc = true;
-        aboutInput = '';
-        var msg = '';
-        if (resp === 'GLITCH_MATRIX') msg = '  <span class="t-ok">wake up, Neo...</span>\n  <span class="t-ok">the Matrix has you.</span>\n  <span class="t-ok">follow the white rabbit.</span>';
-        if (resp === 'GLITCH_HACK')   msg = '  <span class="t-ok">acesso concedido.</span>\n  <span class="t-ok">bem-vindo ao sistema,</span>\n  <span class="t-ok">agente.</span> 🕶️';
-        if (resp === 'GLITCH_42')     msg = '  <span class="t-ok">a resposta para a vida,</span>\n  <span class="t-ok">o universo e tudo mais.</span>\n  <span class="t-dim">— Douglas Adams</span>';
-        runGlitch(aboutRender, s, '').then(function () {
-          aboutLastCmd = s;
-          aboutLastResp = msg;
-          aboutProc = false;
-          aboutShowInteractive();
-        });
-        return;
-      }
-      aboutLastCmd = s; aboutLastResp = resp;
-    }
-    aboutInput = '';
-    aboutShowInteractive();
-  }
-
-  async function runAboutAnim() {
-    aboutRender('');
+  async function runTerraformAnim() {
+    heroRender('');
     await wait(300);
 
     // Fase 1 — digita terraform apply
     var cmd = 'terraform apply';
     for (var c = 0; c <= cmd.length; c++) {
-      aboutRender('<span class="t-cmd">$ ' + cmd.slice(0, c) + '</span><span class="terminal-cursor">▮</span>');
+      heroRender('<span class="t-cmd">$ ' + cmd.slice(0, c) + '</span><span class="terminal-cursor">▮</span>');
       await wait(c === 0 ? 150 : 50);
     }
 
     // Fase 2 — planejando
     await wait(200);
     var base = '<span class="t-cmd">$ ' + cmd + '</span>\n  ↳ planejando recursos...\n\n';
-    aboutRender(base);
+    heroRender(base);
     await wait(350);
 
     // Fase 3 — recursos com spinner + "criando..." animado
@@ -522,68 +385,69 @@
         var dotStr  = '.'.repeat((tick % 3) + 1);
         var dotPad  = ' '.repeat(3 - dotStr.length);
         resLines[r] = '  <span class="t-pending">' + spin + '</span> ' + resNames[r] + '<span class="t-pending">criando' + dotStr + '</span>' + dotPad;
-        aboutRender(base + resLines.join('\n'));
+        heroRender(base + resLines.join('\n'));
         await wait(70);
       }
       resLines[r] = '  <span class="t-ok">+</span> ' + resNames[r] + '<span class="t-ok">criado</span>   ';
-      aboutRender(base + resLines.join('\n'));
+      heroRender(base + resLines.join('\n'));
       await wait(120);
     }
 
     // Fase 4 — apply completo
     await wait(200);
-    var final = base + resLines.join('\n') + '\n\n  Apply complete!\n  4 criados, 0 alt., 0 destruídos';
-    aboutRender(final);
+    var finalHtml = base + resLines.join('\n') + '\n\n  Apply complete!\n  4 criados, 0 alt., 0 destruídos';
+    heroRender(finalHtml);
 
     // Fase 5 — modo interativo
     await wait(600);
-    aboutAnimHtml = final + '\n\n';
-    aboutInteract = true;
-    aboutLastCmd = null;
-    aboutLastResp = null;
-    aboutInput = '';
-    aboutShowInteractive();
-  }
-
-  if (aboutBody) {
-    var aboutTermObs = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting) {
-        aboutTermObs.disconnect();
-        runAboutAnim();
-      }
-    }, { threshold: 0.25 });
-    aboutTermObs.observe(document.getElementById('about'));
+    heroAnimHtml = finalHtml + '\n\n';
+    heroInteract = true;
+    heroLastCmd = null;
+    heroLastResp = null;
+    heroInput = '';
+    heroShowInteractive();
   }
 
   // ============================================================
-  // 8. TECLADO UNIFICADO — roteia para o terminal clicado
-  //    Usa inputs ocultos para abrir teclado virtual no mobile
+  // RANDOM ANIMATION PICKER
+  // ============================================================
+  function pickAndRunHeroAnim() {
+    heroInteract = false;
+    heroInput = '';
+    heroLastCmd = null;
+    heroLastResp = null;
+    heroAnimHtml = '';
+    if (Math.random() < 0.5) {
+      runHeroAnim();
+    } else {
+      runTerraformAnim();
+    }
+  }
+
+  // ============================================================
+  // 8. TECLADO — input do terminal hero
+  //    Usa input oculto para abrir teclado virtual no mobile
   // ============================================================
   var focusedTerminal = null;
   var heroHiddenInput = document.getElementById('heroInput');
-  var aboutHiddenInput = document.getElementById('aboutInput');
 
   document.getElementById('heroTerminal').addEventListener('click', function () {
     focusedTerminal = 'hero';
     heroHiddenInput.focus();
   });
-  document.querySelector('.ascii-about').addEventListener('click', function () {
-    focusedTerminal = 'about';
-    aboutHiddenInput.focus();
-  });
   document.addEventListener('click', function (e) {
-    if (!e.target.closest('#heroTerminal') && !e.target.closest('.ascii-about')) {
+    if (!e.target.closest('#heroTerminal')) {
       focusedTerminal = null;
     }
   });
 
-  function handleTerminalKeydown(e, which) {
+  function handleTerminalKeydown(e) {
     if (e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowUp'
         || e.key === 'PageDown' || e.key === 'PageUp') {
       e.preventDefault();
     }
 
-    if (which === 'hero' && heroInteract && !heroProc) {
+    if (heroInteract && !heroProc) {
       if (e.key === 'Enter') { heroEnter(); heroHiddenInput.value = ''; }
       else if (e.key === 'ArrowUp') {
         e.preventDefault();
@@ -605,39 +469,21 @@
       else if (e.key === ' ') { e.preventDefault(); if (heroInput.length < HERO_MAX) { heroInput += ' '; heroShowInteractive(); } }
       else if (e.key.length === 1 && heroInput.length < HERO_MAX) { e.preventDefault(); heroInput += e.key; heroShowInteractive(); }
     }
-
-    if (which === 'about' && aboutInteract && !aboutProc) {
-      if (e.key === 'Enter') { aboutEnter(); aboutHiddenInput.value = ''; }
-      else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (aboutHistory.length > 0) {
-          if (aboutHistIdx === -1) aboutHistIdx = aboutHistory.length;
-          if (aboutHistIdx > 0) { aboutHistIdx--; aboutInput = aboutHistory[aboutHistIdx]; aboutShowInteractive(); }
-        }
-      }
-      else if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        if (aboutHistIdx !== -1) {
-          aboutHistIdx++;
-          if (aboutHistIdx >= aboutHistory.length) { aboutHistIdx = -1; aboutInput = ''; }
-          else { aboutInput = aboutHistory[aboutHistIdx]; }
-          aboutShowInteractive();
-        }
-      }
-      else if (e.key === 'Backspace') { e.preventDefault(); aboutInput = aboutInput.slice(0, -1); aboutShowInteractive(); }
-      else if (e.key === ' ') { e.preventDefault(); if (aboutInput.length < 30) { aboutInput += ' '; aboutShowInteractive(); } }
-      else if (e.key.length === 1 && aboutInput.length < 30) { e.preventDefault(); aboutInput += e.key; aboutShowInteractive(); }
-    }
   }
 
-  // Keydown nos inputs ocultos (mobile + desktop quando focado no input)
-  heroHiddenInput.addEventListener('keydown', function (e) { handleTerminalKeydown(e, 'hero'); });
-  aboutHiddenInput.addEventListener('keydown', function (e) { handleTerminalKeydown(e, 'about'); });
+  // Keydown no input oculto (mobile + desktop quando focado no input)
+  heroHiddenInput.addEventListener('keydown', function (e) { handleTerminalKeydown(e); });
 
   // Fallback: input event para mobile (alguns teclados virtuais não disparam keydown)
   heroHiddenInput.addEventListener('input', function () {
     if (!heroInteract || heroProc) { this.value = ''; return; }
     var val = this.value;
+    // Detectar Enter/newline do teclado mobile
+    if (val.indexOf('\n') !== -1 || val.indexOf('\r') !== -1) {
+      this.value = '';
+      heroEnter();
+      return;
+    }
     if (val.length > 0) {
       for (var i = 0; i < val.length; i++) {
         if (heroInput.length < HERO_MAX) heroInput += val[i];
@@ -646,16 +492,15 @@
     }
     this.value = '';
   });
-  aboutHiddenInput.addEventListener('input', function () {
-    if (!aboutInteract || aboutProc) { this.value = ''; return; }
-    var val = this.value;
-    if (val.length > 0) {
-      for (var i = 0; i < val.length; i++) {
-        if (aboutInput.length < 30) aboutInput += val[i];
+
+  // Fallback keyup para Enter em teclados mobile que não disparam keydown corretamente
+  heroHiddenInput.addEventListener('keyup', function (e) {
+    if (e.key === 'Enter') {
+      if (heroInteract && !heroProc) {
+        heroEnter();
+        this.value = '';
       }
-      aboutShowInteractive();
     }
-    this.value = '';
   });
 
   // Desktop: keydown global (quando o input oculto NÃO está focado)
@@ -663,7 +508,7 @@
     var tag = (document.activeElement && document.activeElement.tagName) || '';
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
     if (!focusedTerminal) return;
-    handleTerminalKeydown(e, focusedTerminal);
+    handleTerminalKeydown(e);
   });
 
   // ============================================================

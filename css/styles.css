@@ -542,30 +542,17 @@ ul {
   75%      { opacity: 0.9; text-shadow: 0 0 12px rgba(124, 58, 237, 0.9); }
 }
 
-/* About terminal wrapper */
-.about-terminal-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.6rem;
-  margin-left: 150px;
-}
-
-@media (max-width: 700px) {
-  .about-terminal-wrap {
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
 
 /* ============================================================
    ABOUT
    ============================================================ */
 .about-grid {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--spacing-xl);
   align-items: center;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .about-text p {
@@ -599,16 +586,6 @@ ul {
   margin-top: 2px;
 }
 
-.about-image {
-  display: flex;
-  justify-content: flex-start;
-  padding-top: 0.25rem;
-}
-
-.about-image-wrapper {
-  display: flex;
-  justify-content: center;
-}
 
 /* ============================================================
    SKILLS
@@ -781,6 +758,11 @@ ul {
   margin-bottom: var(--spacing-xl);
 }
 
+.contact-info {
+  min-width: 0;
+  overflow: hidden;
+}
+
 .contact-item {
   display: flex;
   align-items: center;
@@ -789,6 +771,16 @@ ul {
   color: var(--color-text-muted);
   font-size: 0.95rem;
   transition: color var(--transition-fast);
+  overflow-wrap: break-word;
+  word-break: break-all;
+  min-width: 0;
+}
+
+.contact-item a,
+.contact-item .email-copy {
+  overflow-wrap: break-word;
+  word-break: break-all;
+  min-width: 0;
 }
 
 .contact-item ion-icon {
@@ -929,6 +921,24 @@ ul {
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+@media (max-width: 1200px) {
+  .section-container,
+  .nav-container,
+  .hero-inner,
+  .footer-container {
+    max-width: 960px;
+  }
+
+  .hero-name {
+    font-size: 3rem;
+  }
+
+  .terminal-body {
+    width: 380px;
+    height: 300px;
+  }
+}
+
 @media (max-width: 1024px) {
   .projects-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -936,6 +946,12 @@ ul {
 
   .contact-grid {
     grid-template-columns: 1fr;
+  }
+
+  .terminal-body {
+    width: 340px;
+    height: 280px;
+    font-size: 0.72rem;
   }
 }
 
@@ -1023,10 +1039,6 @@ ul {
   }
 
   /* About */
-  .about-grid {
-    grid-template-columns: 1fr;
-  }
-
   .about-text {
     text-align: center;
   }
@@ -1039,23 +1051,59 @@ ul {
     justify-content: center;
   }
 
-  .about-image {
-    order: 1;
-  }
-
   /* Skills */
   .skills-grid {
     grid-template-columns: 1fr;
   }
 }
 
+@media (max-width: 600px) {
+  .section-container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .hero-inner {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .terminal-body {
+    width: 260px;
+    height: 240px;
+    font-size: 0.56rem;
+  }
+
+  .hero-name {
+    font-size: 2.2rem;
+  }
+
+  .hero-role {
+    font-size: 1.15rem;
+  }
+
+  .contact-form {
+    padding: var(--spacing-sm);
+  }
+
+  .contact-grid {
+    gap: var(--spacing-lg);
+  }
+}
+
 @media (max-width: 480px) {
+  .section-container {
+    padding: 0 var(--spacing-sm);
+  }
+
   .hero-name {
     font-size: 2rem;
   }
 
   .hero-role {
     font-size: 1.1rem;
+  }
+
+  .hero-description {
+    font-size: 0.9rem;
   }
 
   .projects-grid {
@@ -1075,12 +1123,18 @@ ul {
   }
 
   .contact-form {
-    padding: var(--spacing-md);
+    padding: var(--spacing-sm);
   }
 
   .footer-container {
     flex-direction: column;
     gap: var(--spacing-sm);
     text-align: center;
+  }
+
+  .terminal-body {
+    width: 240px;
+    height: 220px;
+    font-size: 0.52rem;
   }
 }
