@@ -103,9 +103,9 @@
   var heroAnimHtml = '';
   var HERO_MAX     = 30;
 
-  var HERO_HELP = [
+  var HERO_HELP_1 = [
     '',
-    '  <span class="t-ok">Comandos disponíveis:</span>',
+    '  <span class="t-ok">Comandos disponíveis (1/3):</span>',
     '    git push  <span class="t-dim">— deploy para produção</span>',
     '    docker    <span class="t-dim">— status da imagem</span>',
     '    kubectl   <span class="t-dim">— status dos pods</span>',
@@ -113,15 +113,48 @@
     '    whoami    <span class="t-dim">— quem sou eu</span>',
     '    ls        <span class="t-dim">— listar arquivos</span>',
     '    ping      <span class="t-dim">— testar conexão</span>',
-    '    devops    <span class="t-dim">— reiniciar animação</span>',
-    '    clear     <span class="t-dim">— limpar tela</span>',
-    '    help      <span class="t-dim">— mostrar ajuda</span>',
+    '',
+    '  <span class="t-dim">help 2 → mais comandos</span>',
   ].join('\n');
+
+  var HERO_HELP_2 = [
+    '',
+    '  <span class="t-ok">Comandos disponíveis (2/3):</span>',
+    '    devops    <span class="t-dim">— reiniciar animação</span>',
+    '    date      <span class="t-dim">— data e hora atual</span>',
+    '    uptime    <span class="t-dim">— tempo online</span>',
+    '    cat       <span class="t-dim">— ler arquivo</span>',
+    '    status    <span class="t-dim">— status do sistema</span>',
+    '    neofetch  <span class="t-dim">— info do sistema</span>',
+    '    clear     <span class="t-dim">— limpar tela</span>',
+    '',
+    '  <span class="t-dim">help 3 → ???</span>',
+  ].join('\n');
+
+  var HERO_HELP_3 = [
+    '',
+    '  <span class="t-ok">Easter eggs (3/3):</span>',
+    '    <span class="t-glitch">▓░▒█▓░▒</span>  <span class="t-dim">— ???</span>',
+    '    <span class="t-glitch">█▒░▓█▒░</span>  <span class="t-dim">— ???</span>',
+    '    <span class="t-glitch">░▓█▒░▓█</span>  <span class="t-dim">— ???</span>',
+    '',
+    '  <span class="t-pending">encontre os 3 comandos</span>',
+    '  <span class="t-pending">secretos... boa sorte!</span>',
+  ].join('\n');
+
+  function glitchText() {
+    var chars = '▓░▒█▚▞▘▝▗▖╳╬╪║╔╗╚╝┃┣┫';
+    var out = '';
+    for (var i = 0; i < 28; i++) out += chars[Math.floor(Math.random() * chars.length)];
+    return out;
+  }
 
   function heroResponse(raw) {
     var cmd = raw.trim(), lower = cmd.toLowerCase();
     if (!cmd) return null;
-    if (lower === 'help')              return HERO_HELP;
+    if (lower === 'help' || lower === 'help 1') return HERO_HELP_1;
+    if (lower === 'help 2')            return HERO_HELP_2;
+    if (lower === 'help 3')            return HERO_HELP_3;
     if (lower.includes('sudo'))        return '  > permissão negada (boa tentativa)';
     if (lower.includes('terraform'))   return '  > plano: 0 adicionado, 0 destruído';
     if (lower.includes('rm'))          return '  > rm: operação não permitida';
@@ -130,6 +163,14 @@
     if (lower.includes('kubectl'))     return '  > pods: 3/3 rodando  ● ● ●';
     if (lower.includes('docker'))      return '  > imagem: latest  (atualizada)';
     if (lower === 'devops')            return 'DEVOPS_RESTART';
+    if (lower === 'date')              return '  > ' + new Date().toLocaleString('pt-BR');
+    if (lower === 'uptime')            return '  > online há ' + Math.floor(performance.now() / 1000) + 's';
+    if (lower === 'cat')               return '  > 🐱 miau! (esperava um arquivo?)';
+    if (lower === 'status')            return '  > cpu: 12%  mem: 4.2GB/16GB\n  > disk: 47% usado\n  > <span class="t-ok">todos os serviços ok</span>';
+    if (lower === 'neofetch')          return '  > <span class="t-ok">matheus</span>@portfolio\n  > OS: DevOps Linux 4.2\n  > Shell: bash 5.1\n  > Uptime: ∞\n  > Stack: AWS + K8s + Terraform';
+    if (lower === 'matrix')            return 'GLITCH_MATRIX';
+    if (lower === 'hack')              return 'GLITCH_HACK';
+    if (lower === '42')                return 'GLITCH_42';
     if (lower.match(/\b(oi|olá|ola|hello|hi)\b/)) return '  > oi! bem-vindo ao terminal :)\n  > sinta-se à vontade para \n    explorar os comandos! \n  > dica: tente "help"';
     if (lower.includes('ping'))        return '  > pong (64 bytes, tempo=0.4ms)';
     if (lower.includes('ls'))          return '  > deploy.yml  src/  README.md';
@@ -157,6 +198,16 @@
     heroRender(c);
   }
 
+  async function runGlitch(renderFn, cmd, finalMsg) {
+    for (var g = 0; g < 15; g++) {
+      var lines = '';
+      for (var l = 0; l < 5; l++) lines += '  <span class="t-glitch">' + glitchText() + '</span>\n';
+      renderFn('<span class="t-cmd">$ ' + escapeHtml(cmd) + '</span>\n' + lines);
+      await wait(80);
+    }
+    return '<span class="t-cmd">$ ' + escapeHtml(cmd) + '</span>\n' + finalMsg;
+  }
+
   function heroEnter() {
     if (heroProc) return;
     var s = heroInput.trim();
@@ -173,6 +224,21 @@
         heroLastResp = null;
         heroAnimHtml = '';
         runHeroAnim();
+        return;
+      }
+      if (resp && resp.startsWith('GLITCH_')) {
+        heroProc = true;
+        heroInput = '';
+        var msg = '';
+        if (resp === 'GLITCH_MATRIX') msg = '  <span class="t-ok">wake up, Neo...</span>\n  <span class="t-ok">the Matrix has you.</span>\n  <span class="t-ok">follow the white rabbit.</span>';
+        if (resp === 'GLITCH_HACK')   msg = '  <span class="t-ok">acesso concedido.</span>\n  <span class="t-ok">bem-vindo ao sistema,</span>\n  <span class="t-ok">agente.</span> 🕶️';
+        if (resp === 'GLITCH_42')     msg = '  <span class="t-ok">a resposta para a vida,</span>\n  <span class="t-ok">o universo e tudo mais.</span>\n  <span class="t-dim">— Douglas Adams</span>';
+        runGlitch(heroRender, s, '').then(function () {
+          heroLastCmd = s;
+          heroLastResp = msg;
+          heroProc = false;
+          heroShowInteractive();
+        });
         return;
       }
       heroLastCmd = s; heroLastResp = resp;
@@ -298,9 +364,9 @@
   var aboutLastResp = null;
   var aboutAnimHtml = '';
 
-  var ABOUT_HELP = [
+  var ABOUT_HELP_1 = [
     '',
-    '  <span class="t-ok">Comandos disponíveis:</span>',
+    '  <span class="t-ok">Comandos disponíveis (1/3):</span>',
     '    terraform <span class="t-dim">— gerenciar infra</span>',
     '    aws       <span class="t-dim">— status instâncias</span>',
     '    kubectl   <span class="t-dim">— status dos pods</span>',
@@ -308,15 +374,41 @@
     '    whoami    <span class="t-dim">— quem sou eu</span>',
     '    ls        <span class="t-dim">— listar arquivos</span>',
     '    ping      <span class="t-dim">— testar conexão</span>',
+    '',
+    '  <span class="t-dim">help 2 → mais comandos</span>',
+  ].join('\n');
+
+  var ABOUT_HELP_2 = [
+    '',
+    '  <span class="t-ok">Comandos disponíveis (2/3):</span>',
     '    devops    <span class="t-dim">— reiniciar animação</span>',
+    '    date      <span class="t-dim">— data e hora atual</span>',
+    '    uptime    <span class="t-dim">— tempo online</span>',
+    '    cat       <span class="t-dim">— ler arquivo</span>',
+    '    status    <span class="t-dim">— status do sistema</span>',
+    '    neofetch  <span class="t-dim">— info do sistema</span>',
     '    clear     <span class="t-dim">— limpar tela</span>',
-    '    help      <span class="t-dim">— mostrar ajuda</span>',
+    '',
+    '  <span class="t-dim">help 3 → ???</span>',
+  ].join('\n');
+
+  var ABOUT_HELP_3 = [
+    '',
+    '  <span class="t-ok">Easter eggs (3/3):</span>',
+    '    <span class="t-glitch">▓░▒█▓░▒</span>  <span class="t-dim">— ???</span>',
+    '    <span class="t-glitch">█▒░▓█▒░</span>  <span class="t-dim">— ???</span>',
+    '    <span class="t-glitch">░▓█▒░▓█</span>  <span class="t-dim">— ???</span>',
+    '',
+    '  <span class="t-pending">encontre os 3 comandos</span>',
+    '  <span class="t-pending">secretos... boa sorte!</span>',
   ].join('\n');
 
   function aboutResponse(raw) {
     var cmd = raw.trim(), lower = cmd.toLowerCase();
     if (!cmd) return null;
-    if (lower === 'help')                      return ABOUT_HELP;
+    if (lower === 'help' || lower === 'help 1') return ABOUT_HELP_1;
+    if (lower === 'help 2')                    return ABOUT_HELP_2;
+    if (lower === 'help 3')                    return ABOUT_HELP_3;
     if (lower.includes('sudo'))                return '  > permissão negada (boa tentativa)';
     if (lower.includes('terraform apply'))     return '  > 4 criados, 0 destruídos';
     if (lower.includes('terraform plan'))      return '  > plano: 4 a criar, 0 a destruir';
@@ -327,6 +419,14 @@
     if (lower.includes('kubectl'))             return '  > pods: 3/3 rodando  ● ● ●';
     if (lower.includes('docker'))              return '  > imagem: latest  (atualizada)';
     if (lower === 'devops')                    return 'DEVOPS_RESTART';
+    if (lower === 'date')                      return '  > ' + new Date().toLocaleString('pt-BR');
+    if (lower === 'uptime')                    return '  > online há ' + Math.floor(performance.now() / 1000) + 's';
+    if (lower === 'cat')                       return '  > 🐱 miau! (esperava um arquivo?)';
+    if (lower === 'status')                    return '  > cpu: 12%  mem: 4.2GB/16GB\n  > disk: 47% usado\n  > <span class="t-ok">todos os serviços ok</span>';
+    if (lower === 'neofetch')                  return '  > <span class="t-ok">matheus</span>@portfolio\n  > OS: DevOps Linux 4.2\n  > Shell: bash 5.1\n  > Uptime: ∞\n  > Stack: AWS + K8s + Terraform';
+    if (lower === 'matrix')                    return 'GLITCH_MATRIX';
+    if (lower === 'hack')                      return 'GLITCH_HACK';
+    if (lower === '42')                        return 'GLITCH_42';
     if (lower.match(/\b(oi|olá|ola|hello|hi)\b/)) return '  > olá, engenheiro(a)! tudo ok?\n  > sinta-se à vontade para \n    explorar os comandos! \n  > dica: tente "help"';
     if (lower.includes('ping'))                return '  > pong (64 bytes, tempo=0.4ms)';
     if (lower.includes('ls'))                  return '  > main.tf  vars.tf  outputs.tf';
@@ -370,6 +470,21 @@
         aboutLastResp = null;
         aboutAnimHtml = '';
         runAboutAnim();
+        return;
+      }
+      if (resp && resp.startsWith('GLITCH_')) {
+        aboutProc = true;
+        aboutInput = '';
+        var msg = '';
+        if (resp === 'GLITCH_MATRIX') msg = '  <span class="t-ok">wake up, Neo...</span>\n  <span class="t-ok">the Matrix has you.</span>\n  <span class="t-ok">follow the white rabbit.</span>';
+        if (resp === 'GLITCH_HACK')   msg = '  <span class="t-ok">acesso concedido.</span>\n  <span class="t-ok">bem-vindo ao sistema,</span>\n  <span class="t-ok">agente.</span> 🕶️';
+        if (resp === 'GLITCH_42')     msg = '  <span class="t-ok">a resposta para a vida,</span>\n  <span class="t-ok">o universo e tudo mais.</span>\n  <span class="t-dim">— Douglas Adams</span>';
+        runGlitch(aboutRender, s, '').then(function () {
+          aboutLastCmd = s;
+          aboutLastResp = msg;
+          aboutProc = false;
+          aboutShowInteractive();
+        });
         return;
       }
       aboutLastCmd = s; aboutLastResp = resp;

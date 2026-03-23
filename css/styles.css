@@ -511,6 +511,18 @@ ul {
 .t-dim     { color: rgba(255, 255, 255, 0.6); }
 .t-pending { color: #eab308; text-shadow: 0 0 5px rgba(234, 179, 8, 0.5); }
 .t-blue    { color: #3b82f6; text-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+.t-glitch  {
+  color: #ef4444;
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.7), 2px 0 #7c3aed, -2px 0 #22c55e;
+  animation: glitchFlicker 0.8s step-end infinite;
+}
+
+@keyframes glitchFlicker {
+  0%, 100% { opacity: 1; text-shadow: 0 0 8px rgba(239, 68, 68, 0.7), 2px 0 #7c3aed, -2px 0 #22c55e; }
+  25%      { opacity: 0.8; text-shadow: -2px 0 #ef4444, 2px 0 #22c55e; }
+  50%      { opacity: 1; text-shadow: 2px 0 #ef4444, -2px 0 #7c3aed; }
+  75%      { opacity: 0.9; text-shadow: 0 0 12px rgba(124, 58, 237, 0.9); }
+}
 
 /* About terminal wrapper */
 .about-terminal-wrap {
