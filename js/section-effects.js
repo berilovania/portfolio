@@ -70,16 +70,31 @@
       var chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン01{}[]<>/=;:$#@!&|~'.split('');
       var fontSize = isMobile ? 12 : 14;
       var cols = Math.floor((canvas.width / DPR) / fontSize);
-      var drops = [];
+      var TAIL = 10; // number of trailing chars per column
+      var streams = [];
       for (var i = 0; i < cols; i++) {
-        drops[i] = Math.random() * -100;
+        streams.push({
+          y: Math.random() * -200,           // current head position (in rows)
+          speed: Math.random() * 0.08 + 0.05,
+          tail: new Array(TAIL).fill(null).map(function () {
+            return { char: chars[Math.floor(Math.random() * chars.length)], age: 1 };
+          })
+        });
       }
-      return { chars: chars, fontSize: fontSize, drops: drops, cols: cols };
+      return { chars: chars, fontSize: fontSize, streams: streams, cols: cols, TAIL: TAIL };
     },
 
     resize: function (canvas, ctx, state) {
       var newCols = Math.floor((canvas.width / DPR) / state.fontSize);
-      while (state.drops.length < newCols) state.drops.push(Math.random() * -100);
+      while (state.streams.length < newCols) {
+        state.streams.push({
+          y: Math.random() * -200,
+          speed: Math.random() * 0.08 + 0.05,
+          tail: new Array(state.TAIL).fill(null).map(function () {
+            return { char: state.chars[Math.floor(Math.random() * state.chars.length)], age: 1 };
+          })
+        });
+      }
       state.cols = newCols;
     },
 
@@ -87,37 +102,48 @@
       var w = canvas.width / DPR;
       var h = canvas.height / DPR;
 
-      // Slower fade trail — more transparent clear for softer look
-      ctx.fillStyle = 'rgba(17, 17, 17, 0.04)';
-      ctx.fillRect(0, 0, w, h);
+      // Fully transparent each frame — no background fill, no residue
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.font = state.fontSize + 'px "Courier New", monospace';
 
       for (var i = 0; i < state.cols; i++) {
-        if (state.drops[i] * state.fontSize > 0) {
-          var char = state.chars[Math.floor(Math.random() * state.chars.length)];
-          var y = state.drops[i] * state.fontSize;
+        var s = state.streams[i];
+        s.y += s.speed;
 
-          // Soft neon purple head — reduced opacity and glow
-          ctx.fillStyle = 'rgba(157, 95, 255, 0.35)';
-          ctx.shadowColor = 'rgba(124, 58, 237, 0.25)';
-          ctx.shadowBlur = 4;
-          ctx.font = state.fontSize + 'px "Courier New", monospace';
-          ctx.fillText(char, i * state.fontSize, y);
+        // Shift tail: push new char at head, drop oldest
+        s.tail.unshift({ char: state.chars[Math.floor(Math.random() * state.chars.length)], age: 0 });
+        if (s.tail.length > state.TAIL) s.tail.pop();
 
-          // Trail chars (very dim)
-          ctx.shadowBlur = 0;
-          ctx.fillStyle = 'rgba(124, 58, 237, 0.06)';
-          if (y - state.fontSize > 0) {
-            var trailChar = state.chars[Math.floor(Math.random() * state.chars.length)];
-            ctx.fillText(trailChar, i * state.fontSize, y - state.fontSize);
+        var headY = Math.floor(s.y) * state.fontSize;
+        if (headY < -state.fontSize) continue;
+
+        for (var t = 0; t < s.tail.length; t++) {
+          var charY = headY - t * state.fontSize;
+          if (charY < 0 || charY > h) continue;
+
+          // Opacity fades from head to tail
+          var alpha = (1 - t / state.TAIL) * (t === 0 ? 0.35 : 0.18);
+
+          if (t === 0) {
+            // Head: soft neon glow
+            ctx.shadowColor = 'rgba(124, 58, 237, 0.3)';
+            ctx.shadowBlur = 5;
+            ctx.fillStyle = 'rgba(157, 95, 255, ' + alpha + ')';
+          } else {
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = 'rgba(124, 58, 237, ' + alpha + ')';
           }
+
+          ctx.fillText(s.tail[t].char, i * state.fontSize, charY);
         }
 
-        // Much slower fall speed
-        state.drops[i] += 0.15;
-
-        // Less frequent respawn for sparser rain
-        if (state.drops[i] * state.fontSize > h && Math.random() > 0.995) {
-          state.drops[i] = 0;
+        // Reset column when head exits bottom
+        if (headY > h + state.TAIL * state.fontSize) {
+          if (Math.random() > 0.4) {
+            s.y = Math.random() * -80;
+            s.speed = Math.random() * 0.08 + 0.05;
+          }
         }
       }
 
