@@ -556,34 +556,35 @@
   }
 
   // ============================================================
-  // 8. TECLADO UNIFICADO — roteia para o terminal visível
+  // 8. TECLADO UNIFICADO — roteia para o terminal clicado
   // ============================================================
-  function getActiveTerminal() {
-    var heroEl  = document.getElementById('hero');
-    var aboutEl = document.getElementById('about');
-    var vh = window.innerHeight;
-    function score(el) {
-      if (!el) return Infinity;
-      var rect = el.getBoundingClientRect();
-      return Math.abs(rect.top + rect.height / 2 - vh / 2);
+  var focusedTerminal = null;
+
+  document.getElementById('heroTerminal').addEventListener('click', function () {
+    focusedTerminal = 'hero';
+  });
+  document.querySelector('.ascii-about').addEventListener('click', function () {
+    focusedTerminal = 'about';
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('#heroTerminal') && !e.target.closest('.ascii-about')) {
+      focusedTerminal = null;
     }
-    return score(heroEl) <= score(aboutEl) ? 'hero' : 'about';
-  }
+  });
 
   document.addEventListener('keydown', function (e) {
     var tag = (document.activeElement && document.activeElement.tagName) || '';
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
 
-    var any = heroInteract || aboutInteract;
-    if (!any) return;
+    if (!focusedTerminal) return;
 
-    // Trava scroll por teclado
+    // Trava scroll por teclado apenas quando terminal está focado
     if (e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowUp'
         || e.key === 'PageDown' || e.key === 'PageUp') {
       e.preventDefault();
     }
 
-    var active = getActiveTerminal();
+    var active = focusedTerminal;
 
     if (active === 'hero' && heroInteract && !heroProc) {
       if (e.key === 'Enter') { heroEnter(); }

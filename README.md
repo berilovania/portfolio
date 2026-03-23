@@ -1,4 +1,4 @@
-# Matheus Santos — Portfolio
+# Matheus S. Caldas — Portfolio
 
 > **DevOps & Cloud Engineer**
 > [matheuscaldas.com](http://matheuscaldas.com/)
@@ -8,6 +8,8 @@
 Portfólio pessoal desenvolvido para apresentar minha trajetória, habilidades e projetos como Engenheiro DevOps & Cloud. O site foi construído do zero com foco em performance, responsividade e uma experiência interativa inspirada em terminais de linha de comando.
 
 ## Preview
+
+![Hero Section](images/Hero%20section.png)
 
 O site está disponível em: **[matheuscaldas.com](http://matheuscaldas.com/)**
 
@@ -38,7 +40,7 @@ portfolio/
 ## Funcionalidades
 
 ### Terminais Interativos
-O site possui dois terminais funcionais (hero e about) que aceitam comandos reais digitados pelo usuário. Comandos disponíveis incluem `help`, `about`, `skills`, `deploy`, `push`, entre outros — com easter eggs escondidos para os curiosos.
+O site possui dois terminais funcionais (hero e about) que aceitam comandos reais digitados pelo usuário. Os terminais são ativados ao clicar neles. Comandos disponíveis incluem `help`, `about`, `skills`, `deploy`, `push`, entre outros — com easter eggs escondidos para os curiosos. Suporta navegação no histórico de comandos com as setas do teclado (↑/↓), igual a um terminal real.
 
 ### Seções
 - **Hero** — Apresentação com terminal interativo e links sociais
