@@ -976,7 +976,7 @@ ul {
   }
 
   .hero-visual {
-    order: -1;
+    order: 1;
   }
 
   .terminal-body {
@@ -1022,7 +1022,7 @@ ul {
   }
 
   .about-image {
-    order: -1;
+    order: 1;
   }
 
   /* Skills */
