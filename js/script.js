@@ -515,7 +515,68 @@
   });
 
   // ============================================================
-  // 9. EMAIL COPY
+  // 9. CONTACT FORM — Formspree
+  // ============================================================
+  var contactForm  = document.getElementById('contactForm');
+  var submitBtn    = document.getElementById('submitBtn');
+  var formFeedback = document.getElementById('formFeedback');
+
+  if (contactForm) {
+    contactForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Validação básica
+      var name    = contactForm.querySelector('#name').value.trim();
+      var email   = contactForm.querySelector('#email').value.trim();
+      var message = contactForm.querySelector('#message').value.trim();
+      var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!name || !email || !message) {
+        showFeedback('Por favor, preencha todos os campos.', 'error');
+        return;
+      }
+      if (!emailRe.test(email)) {
+        showFeedback('Informe um e-mail válido.', 'error');
+        return;
+      }
+
+      // Estado de envio
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<ion-icon name="hourglass-outline"></ion-icon> Enviando...';
+      formFeedback.className = 'form-feedback';
+      formFeedback.textContent = '';
+
+      fetch(contactForm.action, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(contactForm)
+      })
+      .then(function (res) {
+        if (res.ok) {
+          showFeedback('Mensagem enviada! Entrarei em contato em breve.', 'success');
+          contactForm.reset();
+        } else {
+          showFeedback('Erro ao enviar. Tente novamente.', 'error');
+        }
+      })
+      .catch(function () {
+        showFeedback('Sem conexão. Verifique sua internet e tente novamente.', 'error');
+      })
+      .finally(function () {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<ion-icon name="send-outline"></ion-icon> Enviar Mensagem';
+      });
+    });
+  }
+
+  function showFeedback(msg, type) {
+    if (!formFeedback) return;
+    formFeedback.textContent = msg;
+    formFeedback.className = 'form-feedback form-feedback--' + type;
+  }
+
+  // ============================================================
+  // 10. EMAIL COPY
   // ============================================================
   var emailCopyEl = document.getElementById('emailCopy');
   var copyToast   = document.getElementById('copyToast');

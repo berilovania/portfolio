@@ -505,7 +505,7 @@
           </div>
         </div>
 
-        <form class="contact-form glass-card" id="contactForm" novalidate>
+        <form class="contact-form glass-card" id="contactForm" action="https://formspree.io/f/xzdjngzj" method="POST" novalidate>
           <div class="form-group">
             <label for="name">Nome</label>
             <input type="text" id="name" name="name" placeholder="Seu nome" required />
@@ -518,7 +518,8 @@
             <label for="message">Mensagem</label>
             <textarea id="message" name="message" rows="5" placeholder="Sua mensagem..." required></textarea>
           </div>
-          <button type="submit" class="btn btn-primary btn-full">
+          <div class="form-feedback" id="formFeedback" aria-live="polite"></div>
+          <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
             <ion-icon name="send-outline"></ion-icon>
             Enviar Mensagem
           </button>

@@ -987,6 +987,20 @@ ul {
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
 }
 
+.form-feedback {
+  font-size: 0.875rem;
+  font-weight: 500;
+  min-height: 1.25rem;
+}
+
+.form-feedback--success {
+  color: #4ade80;
+}
+
+.form-feedback--error {
+  color: #f87171;
+}
+
 /* ============================================================
    EMAIL COPY & TOAST
    ============================================================ */
