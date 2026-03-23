@@ -793,6 +793,106 @@ ul {
 }
 
 /* ============================================================
+   CERTIFICATIONS CAROUSEL
+   ============================================================ */
+.section-subtitle {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin-top: var(--spacing-xs);
+}
+
+.certs-carousel-wrapper {
+  overflow: hidden;
+  position: relative;
+  padding: var(--spacing-sm) 0;
+}
+
+.certs-carousel-wrapper::before,
+.certs-carousel-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.certs-carousel-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, var(--color-bg-alt), transparent);
+}
+
+.certs-carousel-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--color-bg-alt), transparent);
+}
+
+.certs-carousel-track {
+  display: flex;
+  gap: var(--spacing-md);
+  width: max-content;
+  animation: carouselScroll 38s linear infinite;
+}
+
+.certs-carousel-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes carouselScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.cert-card {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  min-width: 140px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
+  cursor: default;
+}
+
+.cert-card:hover {
+  border-color: rgba(124, 58, 237, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.2);
+}
+
+.cert-card-icon {
+  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+}
+
+.cert-card-icon i {
+  font-size: 2.5rem;
+}
+
+.cert-svg-icon {
+  width: 42px;
+  height: 42px;
+  color: var(--color-accent-light);
+}
+
+.cert-card-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+/* ============================================================
    CONTACT
    ============================================================ */
 .contact-grid {
