@@ -1,5 +1,7 @@
 /* ============================================================
-   PARTICLE NETWORK — Canvas-based particle system for hero
+   REDE DE PARTÍCULAS — Sistema canvas para o fundo do Hero
+   Partículas roxo/índigo flutuam e se conectam por linhas.
+   No desktop, o mouse repele as partículas próximas.
    ============================================================ */
 (function () {
   'use strict';
@@ -7,32 +9,36 @@
   var canvas = document.getElementById('particleCanvas');
   if (!canvas) return;
 
-  // Respect reduced motion
+  // Respeita a preferência do sistema por menos movimento
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   var ctx = canvas.getContext('2d');
   var particles = [];
   var mouse = { x: null, y: null };
   var isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+  // Menos partículas no mobile para preservar performance
   var PARTICLE_COUNT = isMobile ? 35 : 70;
-  var CONNECT_DIST = 150;
-  var MOUSE_RADIUS = 120;
+  var CONNECT_DIST = 150;  // distância máxima para desenhar conexão entre partículas
+  var MOUSE_RADIUS = 120;  // raio de influência do mouse na repulsão
   var animId = null;
 
   function resize() {
+    // O canvas ocupa exatamente o tamanho da seção hero
     var hero = document.getElementById('hero');
     if (!hero) return;
     canvas.width = hero.offsetWidth;
     canvas.height = hero.offsetHeight;
   }
 
+  // Cada partícula tem posição, velocidade, raio e cor aleatórios
   function Particle() {
     this.x = Math.random() * canvas.width;
     this.y = Math.random() * canvas.height;
     this.vx = (Math.random() - 0.5) * 0.6;
     this.vy = (Math.random() - 0.5) * 0.6;
     this.radius = Math.random() * 1.5 + 0.5;
-    // Purple/indigo range
+    // Alterna entre roxo e índigo para variedade visual
     this.color = Math.random() > 0.5
       ? 'rgba(124, 58, 237, 0.7)'
       : 'rgba(99, 102, 241, 0.6)';
@@ -42,22 +48,24 @@
     this.x += this.vx;
     this.y += this.vy;
 
-    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+    // Rebate nas bordas do canvas
+    if (this.x < 0 || this.x > canvas.width)  this.vx *= -1;
     if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
 
-    // Mouse repulsion (desktop only)
+    // Repulsão do mouse — só no desktop, só quando o cursor está na área
     if (!isMobile && mouse.x !== null) {
       var dx = this.x - mouse.x;
       var dy = this.y - mouse.y;
       var dist = Math.sqrt(dx * dx + dy * dy);
       if (dist < MOUSE_RADIUS && dist > 0) {
+        // Força proporcional à proximidade do mouse
         var force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS * 0.015;
         this.vx += (dx / dist) * force;
         this.vy += (dy / dist) * force;
       }
     }
 
-    // Speed limit
+    // Limita a velocidade máxima para evitar que a repulsão dispare partículas
     var speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
     if (speed > 1.2) {
       this.vx = (this.vx / speed) * 1.2;
@@ -79,6 +87,7 @@
     }
   }
 
+  // Desenha linhas entre partículas próximas — mais próximas = linha mais opaca
   function connectParticles() {
     for (var i = 0; i < particles.length; i++) {
       for (var j = i + 1; j < particles.length; j++) {
@@ -111,7 +120,7 @@
     animId = requestAnimationFrame(animate);
   }
 
-  // Mouse tracking
+  // Rastreia posição do mouse apenas no desktop
   if (!isMobile) {
     var hero = document.getElementById('hero');
     if (hero) {
@@ -121,23 +130,23 @@
         mouse.y = e.clientY - rect.top;
       });
       hero.addEventListener('mouseleave', function () {
+        // Remove a influência ao sair da seção
         mouse.x = null;
         mouse.y = null;
       });
     }
   }
 
-  // Resize handler
   window.addEventListener('resize', function () {
     resize();
   });
 
-  // Start
+  // Inicializa e inicia a animação
   resize();
   init();
   animate();
 
-  // Cleanup on page hide
+  // Pausa quando a aba fica em segundo plano — economiza CPU
   document.addEventListener('visibilitychange', function () {
     if (document.hidden && animId) {
       cancelAnimationFrame(animId);

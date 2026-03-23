@@ -64,16 +64,21 @@
   // ============================================================
 
   // ============================================================
-  // TERMINAL UTILITIES
+  // UTILITÁRIOS DO TERMINAL
   // ============================================================
+
+  // Promessa com delay — usada para criar as animações frame a frame
   function wait(ms) {
     return new Promise(function (resolve) { setTimeout(resolve, ms); });
   }
 
+  // Escapa caracteres HTML para evitar injeção de marcação no terminal
   function escapeHtml(str) {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
+  // Constrói a barra de progresso visual com blocos cheios (█) e vazios (░)
+  // blocks: número de blocos preenchidos (0–16), total sempre 16
   function buildBar(blocks) {
     var pct    = Math.round(blocks / 16 * 100);
     var pctStr = (String(pct) + '%').padStart(4);
@@ -129,6 +134,7 @@
     '  <span class="t-pending">secretos... boa sorte!</span>',
   ].join('\n');
 
+  // Gera uma linha aleatória de caracteres de bloco para o efeito glitch
   function glitchText() {
     var chars = '▓░▒█▚▞▘▝▗▖╳╬╪║╔╗╚╝┃┣┫';
     var out = '';
@@ -330,10 +336,12 @@
     heroShowInteractive();
   }
 
+  // Inicia a animação do terminal apenas quando o hero entra na tela
+  // (threshold 0.25 = pelo menos 25% visível antes de iniciar)
   if (heroBody) {
     var heroTermObs = new IntersectionObserver(function (entries) {
       if (entries[0].isIntersecting) {
-        heroTermObs.disconnect();
+        heroTermObs.disconnect(); // dispara apenas uma vez
         pickAndRunHeroAnim();
       }
     }, { threshold: 0.25 });
@@ -400,7 +408,9 @@
   }
 
   // ============================================================
-  // RANDOM ANIMATION PICKER
+  // SELETOR ALEATÓRIO DE ANIMAÇÃO
+  // Escolhe entre git push e terraform apply com 50% de chance cada.
+  // Também usado pelo comando "devops" para reiniciar a animação.
   // ============================================================
   function pickAndRunHeroAnim() {
     heroInteract = false;
@@ -462,14 +472,15 @@
     }
   }
 
-  // Keydown no input oculto (mobile + desktop quando focado no input)
+  // Captura keydown no input oculto — funciona em desktop e mobile com foco no input
   heroHiddenInput.addEventListener('keydown', function (e) { handleTerminalKeydown(e); });
 
-  // Fallback: input event para mobile (alguns teclados virtuais não disparam keydown)
+  // Fallback via evento "input" para teclados virtuais mobile
+  // Alguns teclados Android/iOS não disparam keydown corretamente
   heroHiddenInput.addEventListener('input', function () {
     if (!heroInteract || heroProc) { this.value = ''; return; }
     var val = this.value;
-    // Detectar Enter/newline do teclado mobile
+    // Detecta Enter/newline enviado pelo teclado virtual
     if (val.indexOf('\n') !== -1 || val.indexOf('\r') !== -1) {
       this.value = '';
       heroEnter();
@@ -481,10 +492,10 @@
       }
       heroShowInteractive();
     }
-    this.value = '';
+    this.value = ''; // limpa o input oculto após capturar os caracteres
   });
 
-  // Fallback keyup para Enter em teclados mobile que não disparam keydown corretamente
+  // Segundo fallback: keyup para Enter em teclados que não disparam keydown
   heroHiddenInput.addEventListener('keyup', function (e) {
     if (e.key === 'Enter') {
       if (heroInteract && !heroProc) {
@@ -494,10 +505,11 @@
     }
   });
 
-  // Desktop: keydown global (quando o input oculto NÃO está focado)
+  // Captura keydown global no desktop quando o input oculto NÃO está com foco
+  // (ex.: usuário clicou no terminal mas o foco ficou no body)
   document.addEventListener('keydown', function (e) {
     var tag = (document.activeElement && document.activeElement.tagName) || '';
-    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return; // não interfere em campos reais
     if (!focusedTerminal) return;
     handleTerminalKeydown(e);
   });

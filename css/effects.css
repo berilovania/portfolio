@@ -1,9 +1,13 @@
 /* ============================================================
-   EFFECTS — Premium Visual Enhancements
+   EFFECTS — Aprimoramentos Visuais Premium
+   Contém: progress bar, grain overlay, orbs, cursor, tilt,
+           divisores de seção, canvas de partículas e canvas de seções.
    ============================================================ */
 
 /* ============================================================
-   SCROLL PROGRESS BAR
+   BARRA DE PROGRESSO DE SCROLL
+   Fica fixada no topo com z-index acima da navbar.
+   A largura é animada pelo GSAP ScrollTrigger em effects.js.
    ============================================================ */
 .scroll-progress {
   position: fixed;
@@ -18,7 +22,11 @@
 }
 
 /* ============================================================
-   NOISE / GRAIN OVERLAY
+   OVERLAY DE RUÍDO / GRAIN
+   SVG com feTurbulence posicionado fixo sobre toda a página.
+   Opacidade baixa (0.04) para ser sutil — apenas textura, não distração.
+   A animação grainShift desloca o SVG em pequenos incrementos
+   para simular o efeito de película (film grain).
    ============================================================ */
 .noise-overlay {
   position: fixed;
@@ -41,7 +49,10 @@
 }
 
 /* ============================================================
-   GRADIENT ORBS (Hero Background)
+   ORBS GRADIENTE FLUTUANTES (Fundo do Hero)
+   Três círculos com blur extremo criam profundidade atmosférica.
+   Cada orb tem duração de animação diferente para dessincronizar
+   o movimento e evitar padrão repetitivo visível.
    ============================================================ */
 .hero-orbs {
   position: absolute;
@@ -61,6 +72,7 @@
   opacity: 0.35;
 }
 
+/* Orb 1 — canto superior esquerdo, roxo intenso, 15s */
 .hero-orb--1 {
   width: 400px;
   height: 400px;
@@ -70,6 +82,7 @@
   animation: floatOrb1 15s ease-in-out infinite;
 }
 
+/* Orb 2 — canto inferior direito, índigo, 20s */
 .hero-orb--2 {
   width: 350px;
   height: 350px;
@@ -79,6 +92,7 @@
   animation: floatOrb2 20s ease-in-out infinite;
 }
 
+/* Orb 3 — centro-direita, lilás claro, 25s */
 .hero-orb--3 {
   width: 300px;
   height: 300px;
@@ -107,7 +121,10 @@
 }
 
 /* ============================================================
-   CUSTOM CURSOR
+   CURSOR PERSONALIZADO
+   Dot: ponto sólido que segue o mouse imediatamente.
+   Circle: anel translúcido com atraso (trailing) via GSAP ticker.
+   A classe .has-custom-cursor no body esconde o cursor nativo.
    ============================================================ */
 .custom-cursor-dot {
   position: fixed;
@@ -138,6 +155,7 @@
   transition: transform 0.15s ease, opacity 0.3s ease, width 0.2s ease, height 0.2s ease;
 }
 
+/* Estado hover: cursor cresce e muda de cor ao passar em elementos interativos */
 .cursor-hover .custom-cursor-dot {
   transform: translate(-50%, -50%) scale(1.5);
 }
@@ -149,7 +167,7 @@
   box-shadow: 0 0 15px rgba(124, 58, 237, 0.35);
 }
 
-/* Hide default cursor on desktop when custom cursor active */
+/* Esconde o cursor nativo no desktop quando o cursor custom está ativo */
 .has-custom-cursor,
 .has-custom-cursor a,
 .has-custom-cursor button,
@@ -160,7 +178,10 @@
 }
 
 /* ============================================================
-   TILT 3D — Perspective Container
+   TILT 3D — Perspectiva nos Glass Cards
+   transform-style: preserve-3d permite que o rotateX/Y do GSAP
+   funcione corretamente em 3D.
+   O .tilt-glare é injetado via JS e segue o mouse como reflexo.
    ============================================================ */
 .tilt-container {
   perspective: 800px;
@@ -189,7 +210,9 @@
 }
 
 /* ============================================================
-   SECTION DIVIDER — Gradient Line
+   DIVISOR DE SEÇÃO — Linha Gradiente com Glow
+   Separa visualmente as seções com uma linha neon sutil.
+   O ::after cria o brilho difuso abaixo da linha.
    ============================================================ */
 .section-divider {
   width: 100%;
@@ -225,7 +248,9 @@
 }
 
 /* ============================================================
-   PARTICLE CANVAS
+   CANVAS DE PARTÍCULAS (Hero)
+   Posicionado absolutamente dentro do #hero, abaixo do conteúdo.
+   pointer-events: none garante que o canvas não intercepte cliques.
    ============================================================ */
 #particleCanvas {
   position: absolute;
@@ -237,7 +262,7 @@
   pointer-events: none;
 }
 
-/* Ensure hero content stays above canvas/orbs */
+/* Garante que o conteúdo do hero fique acima do canvas e dos orbs */
 #hero {
   position: relative;
 }
@@ -248,11 +273,14 @@
 }
 
 /* ============================================================
-   SECTION BACKGROUND CANVASES
+   CANVAS DE FUNDO DAS SEÇÕES
+   Cada seção (about, skills, projects, contact) tem um canvas
+   posicionado absolutamente como fundo animado.
+   O .section-container fica acima via z-index: 1.
    ============================================================ */
 .section {
   position: relative;
-  overflow: hidden;
+  overflow: hidden; /* evita que os canvas vazem para fora da seção */
 }
 
 .section-bg-canvas {
@@ -265,13 +293,16 @@
   pointer-events: none;
 }
 
+/* Conteúdo das seções sempre acima do canvas de fundo */
 .section .section-container {
   position: relative;
   z-index: 1;
 }
 
 /* ============================================================
-   ACCESSIBILITY — Reduced Motion
+   ACESSIBILIDADE — Movimento Reduzido (prefers-reduced-motion)
+   Desativa todas as animações decorativas para usuários que
+   configuraram o sistema para reduzir movimento.
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   .noise-overlay {
@@ -295,6 +326,7 @@
     filter: none;
   }
 
+  /* Remove todos os canvas animados */
   #particleCanvas,
   .section-bg-canvas {
     display: none !important;
@@ -302,9 +334,10 @@
 }
 
 /* ============================================================
-   RESPONSIVE — Mobile Adjustments
+   RESPONSIVO — Ajustes Mobile (≤768px)
    ============================================================ */
 @media (max-width: 768px) {
+  /* Orbs menores e mais transparentes para não sobrecarregar a tela */
   .hero-orb {
     opacity: 0.2;
   }
@@ -319,15 +352,18 @@
     height: 200px;
   }
 
+  /* Terceiro orb removido no mobile — economiza processamento */
   .hero-orb--3 {
     display: none;
   }
 
+  /* Cursor custom nunca aparece em touch */
   .custom-cursor-dot,
   .custom-cursor-circle {
     display: none !important;
   }
 
+  /* Glow do divisor desativado no mobile */
   .section-divider::after {
     display: none;
   }
