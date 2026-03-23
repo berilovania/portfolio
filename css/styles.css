@@ -44,7 +44,7 @@
 }
 
 html {
-  font-size: 17.6px;
+  font-size: 16px;
 }
 
 body {
@@ -437,12 +437,19 @@ ul {
    ============================================================ */
 .terminal-hidden-input {
   position: absolute;
+  left: -9999px;
+  top: 0;
   opacity: 0;
-  width: 0;
-  height: 0;
+  width: 1px;
+  height: 1px;
   padding: 0;
   border: none;
-  pointer-events: none;
+  outline: none;
+  background: transparent;
+  color: transparent;
+  caret-color: transparent;
+  resize: none;
+  overflow: hidden;
 }
 
 .ascii-terminal {

@@ -602,8 +602,8 @@
         }
       }
       else if (e.key === 'Backspace') { e.preventDefault(); heroInput = heroInput.slice(0, -1); heroShowInteractive(); }
-      else if (e.key === ' ') { if (heroInput.length < HERO_MAX) { heroInput += ' '; heroShowInteractive(); } }
-      else if (e.key.length === 1 && heroInput.length < HERO_MAX) { heroInput += e.key; heroShowInteractive(); }
+      else if (e.key === ' ') { e.preventDefault(); if (heroInput.length < HERO_MAX) { heroInput += ' '; heroShowInteractive(); } }
+      else if (e.key.length === 1 && heroInput.length < HERO_MAX) { e.preventDefault(); heroInput += e.key; heroShowInteractive(); }
     }
 
     if (which === 'about' && aboutInteract && !aboutProc) {
@@ -625,8 +625,8 @@
         }
       }
       else if (e.key === 'Backspace') { e.preventDefault(); aboutInput = aboutInput.slice(0, -1); aboutShowInteractive(); }
-      else if (e.key === ' ') { if (aboutInput.length < 30) { aboutInput += ' '; aboutShowInteractive(); } }
-      else if (e.key.length === 1 && aboutInput.length < 30) { aboutInput += e.key; aboutShowInteractive(); }
+      else if (e.key === ' ') { e.preventDefault(); if (aboutInput.length < 30) { aboutInput += ' '; aboutShowInteractive(); } }
+      else if (e.key.length === 1 && aboutInput.length < 30) { e.preventDefault(); aboutInput += e.key; aboutShowInteractive(); }
     }
   }
 
