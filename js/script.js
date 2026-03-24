@@ -100,6 +100,12 @@
   var HERO_MAX     = 30;
   var heroHistory  = [];
   var heroHistIdx  = -1;
+  var heroPlaceholders = [
+    '// Digite oi e dê enter ↵',
+    'Você sabia que dá para interagir comigo? 😊'
+  ];
+  var heroPlaceholderIdx = 0;
+  var heroPlaceholderTimer = null;
 
   var HERO_HELP_1 = [
     '  <span class="t-ok">Comandos (1/3):</span>',
@@ -171,7 +177,7 @@
     if (lower.includes('ping'))        return '  > pong (64 bytes, tempo=0.4ms)\n  <span class="t-dim">resposta vinda de... Nebuchadnezzar?</span>';
     if (lower.includes('ls'))          return '  > deploy.yml  src/  README.md\n  <span class="t-dim">.secret_42  (permissão negada)</span>';
     if (lower.includes('whoami'))      return '  > matheus — engenheiro devops';
-    return '  > ' + escapeHtml(cmd.slice(0, 20)) + ': não encontrado';
+    return '  > <span class="t-err">Comando não encontrado.</span> Digite \'<span class="t-ok">help</span>\' para mais informações.';
   }
 
   function heroRender(html) {
@@ -189,9 +195,23 @@
     }
     c += '<span class="t-cmd">$ ' + escapeHtml(heroInput) + '</span><span class="terminal-cursor">▮</span>';
     if (!heroInput && heroLastCmd === null) {
-      c += '  <span class="t-placeholder">// Digite oi e dê enter ↵</span>';
+      c += '  <span class="t-placeholder">' + heroPlaceholders[heroPlaceholderIdx] + '</span>';
+      startPlaceholderCycle();
     }
     heroRender(c);
+  }
+
+  function startPlaceholderCycle() {
+    if (heroPlaceholderTimer) return;
+    heroPlaceholderTimer = setInterval(function () {
+      if (heroInput || heroLastCmd !== null) {
+        clearInterval(heroPlaceholderTimer);
+        heroPlaceholderTimer = null;
+        return;
+      }
+      heroPlaceholderIdx = (heroPlaceholderIdx + 1) % heroPlaceholders.length;
+      heroShowInteractive();
+    }, 5000);
   }
 
   async function runGlitch(renderFn, cmd, finalMsg) {

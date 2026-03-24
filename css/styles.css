@@ -518,6 +518,7 @@ ul {
 .t-dot-y   { color: #eab308; text-shadow: 0 0 5px rgba(234, 179, 8, 0.7); }
 .t-dot-g   { color: #22c55e; text-shadow: 0 0 5px rgba(34, 197, 94, 0.7); }
 .t-ok      { color: #22c55e; }
+.t-err     { color: #ef4444; }
 .t-cmd     { color: #f2f2f2; font-weight: 500; }
 .t-bar     { color: var(--color-accent); text-shadow: 0 0 6px rgba(124, 58, 237, 0.7); }
 .t-dim     { color: rgba(255, 255, 255, 0.6); }
