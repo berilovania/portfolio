@@ -177,7 +177,7 @@
     if (lower.includes('ping'))        return '  > pong (64 bytes, tempo=0.4ms)\n  <span class="t-dim">resposta vinda de... Nebuchadnezzar?</span>';
     if (lower.includes('ls'))          return '  > deploy.yml  src/  README.md\n  <span class="t-dim">.secret_42  (permissão negada)</span>';
     if (lower.includes('whoami'))      return '  > matheus — engenheiro devops';
-    return '  > <span class="t-err">Comando não encontrado.</span> Digite \'<span class="t-ok">help</span>\' para mais informações.';
+    return '  > <span class="t-err">Comando não encontrado.</span> Digite \'<span class="t-ok">help</span>\' \n    para mais informações.';
   }
 
   function heroRender(html) {
