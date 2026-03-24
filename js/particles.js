@@ -19,8 +19,10 @@
 
   // Menos partículas no mobile para preservar performance
   var PARTICLE_COUNT = isMobile ? 35 : 70;
-  var CONNECT_DIST = 150;  // distância máxima para desenhar conexão entre partículas
-  var MOUSE_RADIUS = 120;  // raio de influência do mouse na repulsão
+  var CONNECT_DIST   = 150;   // distância máxima para desenhar conexão entre partículas
+  var MOUSE_RADIUS   = 120;   // raio de influência do mouse na repulsão
+  var REPULSION_FORCE = 0.015; // multiplicador da força de repulsão do mouse
+  var MAX_SPEED       = 1.2;   // velocidade máxima por partícula
   var animId = null;
 
   function resize() {
@@ -59,7 +61,7 @@
       var dist = Math.sqrt(dx * dx + dy * dy);
       if (dist < MOUSE_RADIUS && dist > 0) {
         // Força proporcional à proximidade do mouse
-        var force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS * 0.015;
+        var force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS * REPULSION_FORCE;
         this.vx += (dx / dist) * force;
         this.vy += (dy / dist) * force;
       }
@@ -67,9 +69,9 @@
 
     // Limita a velocidade máxima para evitar que a repulsão dispare partículas
     var speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-    if (speed > 1.2) {
-      this.vx = (this.vx / speed) * 1.2;
-      this.vy = (this.vy / speed) * 1.2;
+    if (speed > MAX_SPEED) {
+      this.vx = (this.vx / speed) * MAX_SPEED;
+      this.vy = (this.vy / speed) * MAX_SPEED;
     }
   };
 

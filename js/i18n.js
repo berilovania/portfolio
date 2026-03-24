@@ -234,7 +234,7 @@
     },
     init: function () {
       var saved = null;
-      try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+      try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) { console.warn('[i18n] localStorage read failed:', e); }
       var next = normalizeLang(saved || navigator.language || FALLBACK_LANG);
       this.current = SUPPORTED.indexOf(next) > -1 ? next : FALLBACK_LANG;
       this.apply();
@@ -242,7 +242,7 @@
     setLang: function (lang) {
       var next = normalizeLang(lang);
       this.current = SUPPORTED.indexOf(next) > -1 ? next : FALLBACK_LANG;
-      try { localStorage.setItem(STORAGE_KEY, this.current); } catch (e) {}
+      try { localStorage.setItem(STORAGE_KEY, this.current); } catch (e) { console.warn('[i18n] localStorage write failed:', e); }
       this.apply();
     },
     apply: function () {

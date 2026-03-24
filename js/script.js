@@ -78,6 +78,13 @@
   // UTILITÁRIOS DO TERMINAL
   // ============================================================
 
+  // Ações especiais retornadas pelo roteador de comandos
+  var CMD_DEVOPS_RESTART = 'DEVOPS_RESTART';
+  var CMD_GLITCH_MATRIX  = 'GLITCH_MATRIX';
+  var CMD_GLITCH_HACK    = 'GLITCH_HACK';
+  var CMD_GLITCH_42      = 'GLITCH_42';
+  var CMD_GLITCH_PREFIX  = 'GLITCH_';
+
   // Promessa com delay — usada para criar as animações frame a frame
   function wait(ms) {
     return new Promise(function (resolve) { setTimeout(resolve, ms); });
@@ -108,7 +115,8 @@
   var heroLastCmd  = null;
   var heroLastResp = null;
   var heroAnimHtml = '';
-  var HERO_MAX     = 30;
+  var HERO_MAX              = 30;
+  var PLACEHOLDER_INTERVAL  = 5000; // ms entre troca de placeholder
   var heroHistory  = [];
   var heroHistIdx  = -1;
   function getHeroPlaceholders() {
@@ -183,15 +191,15 @@
     if (lower.includes('git'))         return '  ' + i18n.t('cmd_git');
     if (lower.includes('kubectl'))     return '  ' + i18n.t('cmd_kubectl');
     if (lower.includes('docker'))      return '  ' + i18n.t('cmd_docker');
-    if (lower === 'devops')            return 'DEVOPS_RESTART';
+    if (lower === 'devops')            return CMD_DEVOPS_RESTART;
     if (lower === 'date')              return '  > ' + new Date().toLocaleString(i18n.lang());
     if (lower === 'uptime')            return '  ' + i18n.t('cmd_uptime').replace('{seconds}', String(Math.floor(performance.now() / 1000)));
     if (lower === 'cat')               return '  ' + i18n.t('cmd_cat');
     if (lower === 'status')            return '  ' + i18n.t('cmd_status');
     if (lower === 'neofetch')          return '  ' + i18n.t('cmd_neofetch');
-    if (lower === 'matrix')            return 'GLITCH_MATRIX';
-    if (lower === 'hack')              return 'GLITCH_HACK';
-    if (lower === '42')                return 'GLITCH_42';
+    if (lower === 'matrix')            return CMD_GLITCH_MATRIX;
+    if (lower === 'hack')              return CMD_GLITCH_HACK;
+    if (lower === '42')                return CMD_GLITCH_42;
     if (lower.match(/\b(oi|olá|ola|hello|hi)\b/)) return '  ' + i18n.t('cmd_greeting');
     if (lower.includes('ping'))        return '  ' + i18n.t('cmd_ping');
     if (lower.includes('ls'))          return '  ' + i18n.t('cmd_ls');
@@ -232,7 +240,7 @@
       var heroPlaceholders = getHeroPlaceholders();
       heroPlaceholderIdx = (heroPlaceholderIdx + 1) % heroPlaceholders.length;
       heroShowInteractive();
-    }, 5000);
+    }, PLACEHOLDER_INTERVAL);
   }
 
   async function runGlitch(renderFn, cmd, finalMsg) {
@@ -256,17 +264,17 @@
       heroLastCmd = null; heroLastResp = null; heroAnimHtml = '';
     } else {
       var resp = heroResponse(s);
-      if (resp === 'DEVOPS_RESTART') {
+      if (resp === CMD_DEVOPS_RESTART) {
         pickAndRunHeroAnim();
         return;
       }
-      if (resp && resp.startsWith('GLITCH_')) {
+      if (resp && resp.indexOf(CMD_GLITCH_PREFIX) === 0) {
         heroProc = true;
         heroInput = '';
         var msg = '';
-        if (resp === 'GLITCH_MATRIX') msg = '  <span class="t-ok">wake up, Neo...</span>\n  <span class="t-ok">the Matrix has you.</span>\n  <span class="t-ok">follow the white rabbit.</span>';
-        if (resp === 'GLITCH_HACK')   msg = '  <span class="t-ok">' + i18n.t('glitch_hack_1') + '</span>\n  <span class="t-ok">' + i18n.t('glitch_hack_2') + '</span>\n  <span class="t-ok">' + i18n.t('glitch_hack_3') + '</span> 🕶️';
-        if (resp === 'GLITCH_42')     msg = '  <span class="t-ok">' + i18n.t('glitch_42_1') + '</span>\n  <span class="t-ok">' + i18n.t('glitch_42_2') + '</span>\n  <span class="t-dim">' + i18n.t('glitch_42_3') + '</span>';
+        if (resp === CMD_GLITCH_MATRIX) msg = '  <span class="t-ok">wake up, Neo...</span>\n  <span class="t-ok">the Matrix has you.</span>\n  <span class="t-ok">follow the white rabbit.</span>';
+        if (resp === CMD_GLITCH_HACK)   msg = '  <span class="t-ok">' + i18n.t('glitch_hack_1') + '</span>\n  <span class="t-ok">' + i18n.t('glitch_hack_2') + '</span>\n  <span class="t-ok">' + i18n.t('glitch_hack_3') + '</span> 🕶️';
+        if (resp === CMD_GLITCH_42)     msg = '  <span class="t-ok">' + i18n.t('glitch_42_1') + '</span>\n  <span class="t-ok">' + i18n.t('glitch_42_2') + '</span>\n  <span class="t-dim">' + i18n.t('glitch_42_3') + '</span>';
         runGlitch(heroRender, s, '').then(function () {
           heroLastCmd = s;
           heroLastResp = msg;
