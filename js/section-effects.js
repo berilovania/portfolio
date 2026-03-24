@@ -60,9 +60,13 @@
 
     observer.observe(section);
 
+    var resizeTimer = null;
     window.addEventListener('resize', function () {
-      resize();
-      if (drawFn.resize) drawFn.resize(canvas, ctx, state);
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () {
+        resize();
+        if (drawFn.resize) drawFn.resize(canvas, ctx, state);
+      }, 150);
     });
 
     activeCanvases.push({ canvas: canvas, observer: observer });

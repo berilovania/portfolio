@@ -47,27 +47,27 @@
     navToggle.classList.toggle('open', isOpen);
     navToggle.setAttribute('aria-expanded', String(isOpen));
   });
-  navLinksEl.querySelectorAll('.nav-link').forEach(function (link) {
-    link.addEventListener('click', function () {
+  navLinksEl.addEventListener('click', function (e) {
+    if (e.target.closest('.nav-link')) {
       navLinksEl.classList.remove('open');
       navToggle.classList.remove('open');
       navToggle.setAttribute('aria-expanded', 'false');
-    });
+    }
   });
 
   // ============================================================
   // 4. SMOOTH SCROLL — offset for fixed navbar
   // ============================================================
-  document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
-    anchor.addEventListener('click', function (e) {
-      var targetId = this.getAttribute('href');
-      if (targetId === '#') return;
-      var targetEl = document.querySelector(targetId);
-      if (!targetEl) return;
-      e.preventDefault();
-      var targetTop = targetEl.getBoundingClientRect().top + window.scrollY - navbar.offsetHeight;
-      window.scrollTo({ top: targetTop, behavior: 'smooth' });
-    });
+  document.addEventListener('click', function (e) {
+    var anchor = e.target.closest('a[href^="#"]');
+    if (!anchor) return;
+    var targetId = anchor.getAttribute('href');
+    if (targetId === '#') return;
+    var targetEl = document.querySelector(targetId);
+    if (!targetEl) return;
+    e.preventDefault();
+    var targetTop = targetEl.getBoundingClientRect().top + window.scrollY - navbar.offsetHeight;
+    window.scrollTo({ top: targetTop, behavior: 'smooth' });
   });
 
   // ============================================================
@@ -606,10 +606,14 @@
       submitBtn.disabled = true;
       setSubmitLabel('form_submitting', 'hourglass-outline');
 
+      var abortCtrl = new AbortController();
+      var fetchTimeout = setTimeout(function () { abortCtrl.abort(); }, 15000);
+
       fetch(contactForm.action, {
         method: 'POST',
         headers: { 'Accept': 'application/json' },
-        body: new FormData(contactForm)
+        body: new FormData(contactForm),
+        signal: abortCtrl.signal
       })
       .then(function (res) {
         if (res.ok) {
@@ -624,14 +628,15 @@
         showFeedback(i18n.t('form_offline'), 'error');
       })
       .finally(function () {
+        clearTimeout(fetchTimeout);
         submitBtn.disabled = false;
         setSubmitLabel('form_submit', 'send-outline');
       });
     });
 
     // Remove destaque de erro ao começar a corrigir o campo
-    contactForm.querySelectorAll('input, textarea').forEach(function (el) {
-      el.addEventListener('input', function () { setFieldError(this, false); });
+    contactForm.addEventListener('input', function (e) {
+      if (e.target.matches('input, textarea')) setFieldError(e.target, false);
     });
   }
 

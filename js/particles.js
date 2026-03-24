@@ -137,8 +137,10 @@
     }
   }
 
+  var resizeTimer = null;
   window.addEventListener('resize', function () {
-    resize();
+    if (resizeTimer) clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, 150);
   });
 
   // Inicializa e inicia a animação
