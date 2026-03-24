@@ -102,7 +102,7 @@
   var heroHistIdx  = -1;
   var heroPlaceholders = [
     '// Digite oi e dê enter ↵',
-    'Você sabia que dá para interagir comigo? 😊'
+    'Você sabia que dá para \n      interagir comigo? 😊'
   ];
   var heroPlaceholderIdx = 0;
   var heroPlaceholderTimer = null;
