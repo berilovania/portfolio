@@ -1329,19 +1329,43 @@ ul {
    PROJECT DIALOG
 ============================================================ */
 .project-dialog {
-  border: none;
+  border: 1px solid rgba(124, 58, 237, 0.25);
   border-radius: 16px;
   padding: 0;
   max-width: 640px;
   width: calc(100% - 2rem);
+  margin: auto;
   background: var(--color-surface);
   color: var(--color-text);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6),
+              0 0 40px rgba(124, 58, 237, 0.1);
+  overflow: hidden;
+}
+
+.project-dialog[open] {
+  animation: dialogFadeIn 0.3s ease;
+}
+
+@keyframes dialogFadeIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .project-dialog::backdrop {
   background: rgba(0, 0, 0, 0.72);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
+  animation: backdropFadeIn 0.3s ease;
+}
+
+@keyframes backdropFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Restore native cursor inside dialog (top-layer hides custom cursor) */
+.project-dialog,
+.project-dialog * {
+  cursor: auto !important;
 }
 
 .project-dialog-inner {
@@ -1355,28 +1379,28 @@ ul {
   top: 12px;
   right: 12px;
   z-index: 1;
-  background: rgba(0, 0, 0, 0.45);
-  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   width: 36px;
   height: 36px;
-  cursor: pointer;
+  cursor: pointer !important;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   font-size: 1.25rem;
-  transition: background 0.2s;
+  transition: background 0.2s, border-color 0.2s;
 }
 
 .project-dialog-close:hover {
   background: rgba(124, 58, 237, 0.65);
+  border-color: rgba(124, 58, 237, 0.4);
 }
 
 .project-dialog-image {
   width: 100%;
   overflow: hidden;
-  border-radius: 16px 16px 0 0;
   background: var(--color-bg);
 }
 
@@ -1386,15 +1410,80 @@ ul {
   object-fit: contain;
 }
 
+/* Divider between image and content */
+.project-dialog-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-accent) 30%,
+    var(--color-accent-light) 50%,
+    var(--color-accent) 70%,
+    transparent 100%
+  );
+  position: relative;
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+.project-dialog-divider::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(124, 58, 237, 0.3) 30%,
+    rgba(157, 95, 255, 0.4) 50%,
+    rgba(124, 58, 237, 0.3) 70%,
+    transparent 100%
+  );
+  filter: blur(4px);
+}
+
 .project-dialog-content {
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 1.75rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+/* Tag inside dialog */
+.project-dialog-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.project-dialog-tag--lab {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+  border-color: rgba(74, 222, 128, 0.25);
+}
+
+.project-dialog-tag .tag-icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
 }
 
 .project-dialog-title {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--color-text);
   margin: 0;
@@ -1402,16 +1491,36 @@ ul {
 
 .project-dialog-desc {
   color: var(--color-text-muted);
-  line-height: 1.7;
+  line-height: 1.75;
   font-size: 0.9rem;
   margin: 0;
+  max-width: 540px;
 }
 
 .project-dialog-btn {
-  align-self: flex-start;
   margin-top: 0.25rem;
+  cursor: pointer !important;
 }
 
 .project-card[data-github] {
   cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .project-dialog {
+    width: calc(100% - 1rem);
+    border-radius: 12px;
+  }
+
+  .project-dialog-content {
+    padding: 1.25rem 1rem 1.5rem;
+  }
+
+  .project-dialog-title {
+    font-size: 1.1rem;
+  }
+
+  .project-dialog-desc {
+    font-size: 0.85rem;
+  }
 }

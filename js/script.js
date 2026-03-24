@@ -628,6 +628,7 @@
   var projectDialogTitle = document.getElementById('projectDialogTitle');
   var projectDialogDesc  = document.getElementById('projectDialogDesc');
   var projectDialogBtn   = document.getElementById('projectDialogBtn');
+  var projectDialogTag   = document.getElementById('projectDialogTag');
 
   if (projectDialog) {
     document.querySelectorAll('.project-card[data-github]').forEach(function (card) {
@@ -637,6 +638,17 @@
         projectDialogTitle.textContent = this.getAttribute('data-title');
         projectDialogDesc.textContent  = this.getAttribute('data-description');
         projectDialogBtn.href          = this.getAttribute('data-github');
+
+        // Clone the tag from the card
+        var cardTag = this.querySelector('.project-tag');
+        if (cardTag && projectDialogTag) {
+          projectDialogTag.innerHTML = cardTag.innerHTML;
+          projectDialogTag.className = 'project-dialog-tag';
+          if (cardTag.classList.contains('project-tag--lab')) {
+            projectDialogTag.classList.add('project-dialog-tag--lab');
+          }
+        }
+
         projectDialog.showModal();
       });
       card.addEventListener('keydown', function (e) {

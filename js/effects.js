@@ -212,7 +212,7 @@
       });
 
       // Aumenta o cursor ao passar sobre elementos interativos
-      var interactives = document.querySelectorAll('a, button, input, textarea, .btn, .social-link, .nav-link, .skill-pill, .project-card-link');
+      var interactives = document.querySelectorAll('a, button, input, textarea, .btn, .social-link, .nav-link, .skill-pill, .project-card[data-github]');
       interactives.forEach(function (el) {
         el.addEventListener('mouseenter', function () { document.body.classList.add('cursor-hover'); });
         el.addEventListener('mouseleave', function () { document.body.classList.remove('cursor-hover'); });
