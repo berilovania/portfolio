@@ -189,8 +189,11 @@
       <div class="projects-grid fade-in">
 
           <!-- ── Projeto ── -->
-          <a href="https://github.com/berilovania/OrderService-ProjectDevOps" target="_blank" rel="noopener" class="project-card-link">
-          <article class="project-card glass-card">
+          <article class="project-card glass-card" tabindex="0" role="button"
+            data-github="https://github.com/berilovania/OrderService-ProjectDevOps"
+            data-image="images/order-service.png"
+            data-title="OrderService Pipeline"
+            data-description="Pipeline CI/CD completo construído com GitHub Actions, com deploy automático em Kubernetes (k3s) na Google Cloud Platform. Inclui build multi-stage Docker para otimização do tamanho da imagem, scan de vulnerabilidades com Trivy integrado ao pipeline, coleta de métricas com Prometheus e banco de dados PostgreSQL como StatefulSet. Todo o fluxo, do push de código até a atualização dos pods em produção, é totalmente automatizado.">
             <div class="project-card-image">
               <img src="images/order-service.png" alt="OrderService Pipeline dashboard" loading="lazy" />
             </div>
@@ -219,11 +222,13 @@
               </div>
             </div>
           </article>
-          </a>
 
           <!-- ── Projeto ── -->
-          <a href="https://github.com/berilovania/youtube-ai-summary" target="_blank" rel="noopener" class="project-card-link">
-          <article class="project-card glass-card">
+          <article class="project-card glass-card" tabindex="0" role="button"
+            data-github="https://github.com/berilovania/youtube-ai-summary"
+            data-image="images/youtube-ai-summary.png"
+            data-title="YouTube AI Summary"
+            data-description="Aplicação web construída com Streamlit que resume automaticamente vídeos do YouTube. Extrai as legendas do vídeo e processa o texto via API Mistral AI para gerar um resumo coerente. Possui modo especial de interpretação de músicas, detecção automática de idioma e exportação dos resumos em TXT ou PDF. Interface simples e direta, ideal para consumir conteúdo longo em fração do tempo.">
             <div class="project-card-image">
               <img src="images/youtube-ai-summary.png" alt="YouTube AI Summary screenshot" loading="lazy" />
             </div>
@@ -250,11 +255,13 @@
               </div>
             </div>
           </article>
-          </a>
 
           <!-- ── Lab ── -->
-          <a href="https://github.com/berilovania/malware-simulation-lab" target="_blank" rel="noopener" class="project-card-link">
-          <article class="project-card glass-card">
+          <article class="project-card glass-card" tabindex="0" role="button"
+            data-github="https://github.com/berilovania/malware-simulation-lab"
+            data-image="images/malware_simulation_lab_banner.svg"
+            data-title="Malware Simulation Lab"
+            data-description="Laboratório educacional de simulação de malware em ambiente controlado e isolado. Implementa dois módulos: um ransomware simulado que criptografa arquivos via biblioteca Cryptography, demonstrando como esse tipo de ataque funciona internamente; e um keylogger que captura pressionamentos de teclas com Pynput e os envia por e-mail. O foco é educacional e defensivo — cada módulo vem acompanhado de análise do comportamento malicioso e estratégias concretas de mitigação.">
             <div class="project-card-image">
               <img src="images/malware_simulation_lab_banner.svg" alt="Malware Simulation Lab banner" loading="lazy" />
             </div>
@@ -281,11 +288,13 @@
               </div>
             </div>
           </article>
-          </a>
 
           <!-- ── Lab ── -->
-          <a href="https://github.com/berilovania/kali-medusa-bruteforce-lab" target="_blank" rel="noopener" class="project-card-link">
-          <article class="project-card glass-card">
+          <article class="project-card glass-card" tabindex="0" role="button"
+            data-github="https://github.com/berilovania/kali-medusa-bruteforce-lab"
+            data-image="images/brute_force_lab_banner.svg"
+            data-title="Brute Force Lab"
+            data-description="Laboratório de segurança ofensiva configurado com Kali Linux e a ferramenta Medusa. Cobre três cenários: ataques de força bruta em FTP, testes em aplicações web vulneráveis (DVWA) com bypass de proteção CSRF, e password spraying em SMB. Cada cenário é documentado com análise dos vetores explorados e estratégias de mitigação, sendo valioso tanto para pentesters em formação quanto para profissionais de segurança defensiva.">
             <div class="project-card-image">
               <img src="images/brute_force_lab_banner.svg" alt="Brute Force Lab banner" loading="lazy" />
             </div>
@@ -313,7 +322,6 @@
               </div>
             </div>
           </article>
-          </a>
 
       </div>
 
@@ -545,6 +553,26 @@
   </footer>
 
   <div class="copy-toast" id="copyToast">E-mail copiado!</div>
+
+  <!-- PROJECT DIALOG -->
+  <dialog id="projectDialog" class="project-dialog">
+    <div class="project-dialog-inner">
+      <button class="project-dialog-close" id="projectDialogClose" aria-label="Fechar">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+      <div class="project-dialog-image">
+        <img id="projectDialogImg" src="" alt="" />
+      </div>
+      <div class="project-dialog-content">
+        <h3 id="projectDialogTitle" class="project-dialog-title"></h3>
+        <p id="projectDialogDesc" class="project-dialog-desc"></p>
+        <a id="projectDialogBtn" href="#" target="_blank" rel="noopener" class="btn btn-primary project-dialog-btn">
+          <ion-icon name="logo-github"></ion-icon>
+          Ver projeto
+        </a>
+      </div>
+    </div>
+  </dialog>
 
   <!-- Ionicons -->
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

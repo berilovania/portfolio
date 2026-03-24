@@ -602,6 +602,7 @@
 
   // ============================================================
   // 10. EMAIL COPY
+
   // ============================================================
   var emailCopyEl = document.getElementById('emailCopy');
   var copyToast   = document.getElementById('copyToast');
@@ -615,6 +616,40 @@
           setTimeout(function () { copyToast.classList.remove('show'); }, 2000);
         }
       });
+    });
+  }
+
+  // ============================================================
+  // 11. PROJECT DIALOG
+  // ============================================================
+  var projectDialog      = document.getElementById('projectDialog');
+  var projectDialogClose = document.getElementById('projectDialogClose');
+  var projectDialogImg   = document.getElementById('projectDialogImg');
+  var projectDialogTitle = document.getElementById('projectDialogTitle');
+  var projectDialogDesc  = document.getElementById('projectDialogDesc');
+  var projectDialogBtn   = document.getElementById('projectDialogBtn');
+
+  if (projectDialog) {
+    document.querySelectorAll('.project-card[data-github]').forEach(function (card) {
+      card.addEventListener('click', function () {
+        projectDialogImg.src = this.getAttribute('data-image');
+        projectDialogImg.alt = this.getAttribute('data-title');
+        projectDialogTitle.textContent = this.getAttribute('data-title');
+        projectDialogDesc.textContent  = this.getAttribute('data-description');
+        projectDialogBtn.href          = this.getAttribute('data-github');
+        projectDialog.showModal();
+      });
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
+      });
+    });
+
+    projectDialogClose.addEventListener('click', function () {
+      projectDialog.close();
+    });
+
+    projectDialog.addEventListener('click', function (e) {
+      if (e.target === this) this.close();
     });
   }
 
