@@ -1408,11 +1408,7 @@ ul {
   to   { opacity: 1; }
 }
 
-/* Restore native cursor inside dialog (top-layer hides custom cursor) */
-.project-dialog,
-.project-dialog * {
-  cursor: auto !important;
-}
+/* Cursor override for dialog moved to effects.css (needs to beat .has-custom-cursor specificity) */
 
 .project-dialog-inner {
   position: relative;
@@ -1430,7 +1426,6 @@ ul {
   border-radius: 50%;
   width: 36px;
   height: 36px;
-  cursor: pointer !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1550,7 +1545,6 @@ ul {
 
 .project-dialog-btn {
   margin-top: 0.25rem;
-  cursor: pointer !important;
 }
 
 .project-card[data-github] {

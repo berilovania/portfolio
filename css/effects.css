@@ -177,6 +177,18 @@
   cursor: none !important;
 }
 
+/* Top-layer (dialog showModal) esconde o cursor custom — restaura o nativo */
+.project-dialog,
+.project-dialog a,
+.project-dialog button {
+  cursor: auto !important;
+}
+
+.project-dialog .project-dialog-close,
+.project-dialog .project-dialog-btn {
+  cursor: pointer !important;
+}
+
 /* ============================================================
    TILT 3D — Perspectiva nos Glass Cards
    transform-style: preserve-3d permite que o rotateX/Y do GSAP
