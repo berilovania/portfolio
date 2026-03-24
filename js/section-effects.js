@@ -559,7 +559,7 @@
   // ============================================================
   // INICIALIZAÇÃO — associa cada efeito à sua seção
   // ============================================================
-  setupCanvas('about',    matrixEffect);
+  setupCanvas('certifications', matrixEffect);
   setupCanvas('skills',   geometricEffect);
   setupCanvas('projects', dataFlowEffect);
   setupCanvas('contact',  circuitEffect);
