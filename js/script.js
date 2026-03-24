@@ -628,25 +628,27 @@
   var projectDialogTitle = document.getElementById('projectDialogTitle');
   var projectDialogDesc  = document.getElementById('projectDialogDesc');
   var projectDialogBtn   = document.getElementById('projectDialogBtn');
-  var projectDialogTag   = document.getElementById('projectDialogTag');
-
   if (projectDialog) {
     document.querySelectorAll('.project-card[data-github]').forEach(function (card) {
       card.addEventListener('click', function () {
         projectDialogImg.src = this.getAttribute('data-image');
         projectDialogImg.alt = this.getAttribute('data-title');
-        projectDialogTitle.textContent = this.getAttribute('data-title');
-        projectDialogDesc.textContent  = this.getAttribute('data-description');
-        projectDialogBtn.href          = this.getAttribute('data-github');
+        projectDialogDesc.textContent = this.getAttribute('data-description');
+        projectDialogBtn.href         = this.getAttribute('data-github');
 
-        // Clone the tag from the card
+        // Build title: tag icon + tag text + separator + project name
         var cardTag = this.querySelector('.project-tag');
-        if (cardTag && projectDialogTag) {
-          projectDialogTag.innerHTML = cardTag.innerHTML;
-          projectDialogTag.className = 'project-dialog-tag';
+        var title   = this.getAttribute('data-title');
+        projectDialogTitle.className = 'project-dialog-title';
+        if (cardTag) {
+          projectDialogTitle.innerHTML = cardTag.innerHTML
+            + '<span class="project-dialog-title-sep"></span>'
+            + '<span class="project-dialog-title-name">' + title + '</span>';
           if (cardTag.classList.contains('project-tag--lab')) {
-            projectDialogTag.classList.add('project-dialog-tag--lab');
+            projectDialogTitle.classList.add('project-dialog-title--lab');
           }
+        } else {
+          projectDialogTitle.innerHTML = '<span class="project-dialog-title-name">' + title + '</span>';
         }
 
         projectDialog.showModal();
