@@ -6,6 +6,17 @@
   var navLinksEl = document.getElementById('navLinks');
   var navLinks   = document.querySelectorAll('.nav-link');
   var sections   = document.querySelectorAll('section[id]');
+  var langToggle = document.getElementById('langToggle');
+  var i18n = window.i18n || {
+    t: function (key) { return key; },
+    lang: function () { return 'pt-BR'; },
+    init: function () {},
+    setLang: function () {}
+  };
+
+  if (window.i18n && typeof window.i18n.init === 'function') {
+    window.i18n.init();
+  }
 
   // ============================================================
   // 1. NAVBAR — scroll background
@@ -100,45 +111,53 @@
   var HERO_MAX     = 30;
   var heroHistory  = [];
   var heroHistIdx  = -1;
-  var heroPlaceholders = [
-    '// Digite oi e dê enter ↵',
-    'Você sabia que dá para \n      interagir comigo? 😊'
-  ];
+  function getHeroPlaceholders() {
+    return [
+      i18n.t('terminal_placeholder_0'),
+      i18n.t('terminal_placeholder_1')
+    ];
+  }
   var heroPlaceholderIdx = 0;
   var heroPlaceholderTimer = null;
 
-  var HERO_HELP_1 = [
-    '  <span class="t-ok">Comandos (1/3):</span>',
-    '    git push  <span class="t-dim">— deploy para produção</span>',
-    '    docker    <span class="t-dim">— status da imagem</span>',
-    '    kubectl   <span class="t-dim">— status dos pods</span>',
-    '    terraform <span class="t-dim">— plano de infra</span>',
-    '    whoami    <span class="t-dim">— quem sou eu</span>',
-    '    ls        <span class="t-dim">— listar arquivos</span>',
-    '    ping      <span class="t-dim">— testar conexão</span>',
-    '  <span class="t-dim">help 2 → mais comandos</span>',
-  ].join('\n');
+  function getHeroHelp1() {
+    return [
+      '  <span class="t-ok">' + i18n.t('help_1_title') + '</span>',
+      '    git push  <span class="t-dim">— ' + i18n.t('help_git_push') + '</span>',
+      '    docker    <span class="t-dim">— ' + i18n.t('help_docker') + '</span>',
+      '    kubectl   <span class="t-dim">— ' + i18n.t('help_kubectl') + '</span>',
+      '    terraform <span class="t-dim">— ' + i18n.t('help_terraform') + '</span>',
+      '    whoami    <span class="t-dim">— ' + i18n.t('help_whoami') + '</span>',
+      '    ls        <span class="t-dim">— ' + i18n.t('help_ls') + '</span>',
+      '    ping      <span class="t-dim">— ' + i18n.t('help_ping') + '</span>',
+      '  <span class="t-dim">' + i18n.t('help_more_2') + '</span>',
+    ].join('\n');
+  }
 
-  var HERO_HELP_2 = [
-    '  <span class="t-ok">Comandos (2/3):</span>',
-    '    devops    <span class="t-dim">— reiniciar animação</span>',
-    '    date      <span class="t-dim">— data e hora atual</span>',
-    '    uptime    <span class="t-dim">— tempo online</span>',
-    '    cat       <span class="t-dim">— ler arquivo</span>',
-    '    status    <span class="t-dim">— status do sistema</span>',
-    '    neofetch  <span class="t-dim">— info do sistema</span>',
-    '    clear     <span class="t-dim">— limpar tela</span>',
-    '  <span class="t-dim">help 3 → ???</span>',
-  ].join('\n');
+  function getHeroHelp2() {
+    return [
+      '  <span class="t-ok">' + i18n.t('help_2_title') + '</span>',
+      '    devops    <span class="t-dim">— ' + i18n.t('help_devops') + '</span>',
+      '    date      <span class="t-dim">— ' + i18n.t('help_date') + '</span>',
+      '    uptime    <span class="t-dim">— ' + i18n.t('help_uptime') + '</span>',
+      '    cat       <span class="t-dim">— ' + i18n.t('help_cat') + '</span>',
+      '    status    <span class="t-dim">— ' + i18n.t('help_status') + '</span>',
+      '    neofetch  <span class="t-dim">— ' + i18n.t('help_neofetch') + '</span>',
+      '    clear     <span class="t-dim">— ' + i18n.t('help_clear') + '</span>',
+      '  <span class="t-dim">' + i18n.t('help_more_3') + '</span>',
+    ].join('\n');
+  }
 
-  var HERO_HELP_3 = [
-    '  <span class="t-ok">Easter eggs (3/3):</span>',
-    '    <span class="t-glitch">▓░▒█▓░▒</span>  <span class="t-dim">— ???</span>',
-    '    <span class="t-glitch">█▒░▓█▒░</span>  <span class="t-dim">— ???</span>',
-    '    <span class="t-glitch">░▓█▒░▓█</span>  <span class="t-dim">— ???</span>',
-    '  <span class="t-pending">encontre os 3 comandos</span>',
-    '  <span class="t-pending">secretos... boa sorte!</span>',
-  ].join('\n');
+  function getHeroHelp3() {
+    return [
+      '  <span class="t-ok">' + i18n.t('help_3_title') + '</span>',
+      '    <span class="t-glitch">▓░▒█▓░▒</span>  <span class="t-dim">— ???</span>',
+      '    <span class="t-glitch">█▒░▓█▒░</span>  <span class="t-dim">— ???</span>',
+      '    <span class="t-glitch">░▓█▒░▓█</span>  <span class="t-dim">— ???</span>',
+      '  <span class="t-pending">' + i18n.t('help_secret_1') + '</span>',
+      '  <span class="t-pending">' + i18n.t('help_secret_2') + '</span>',
+    ].join('\n');
+  }
 
   // Gera uma linha aleatória de caracteres de bloco para o efeito glitch
   function glitchText() {
@@ -151,33 +170,33 @@
   function heroResponse(raw) {
     var cmd = raw.trim(), lower = cmd.toLowerCase();
     if (!cmd) return null;
-    if (lower === 'help' || lower === 'help 1') return HERO_HELP_1;
-    if (lower === 'help 2')            return HERO_HELP_2;
-    if (lower === 'help 3')            return HERO_HELP_3;
-    if (lower.includes('sudo'))        return '  > permissão negada (boa tentativa)\n  <span class="t-dim">dica: tente invadir de outro jeito...</span>';
-    if (lower.includes('terraform apply'))  return '  > 4 criados, 0 destruídos';
-    if (lower.includes('terraform plan'))   return '  > plano: 4 a criar, 0 a destruir';
-    if (lower.includes('terraform'))        return '  > recursos: 4 gerenciados\n  <span class="t-dim">recurso #42: classificado</span>';
-    if (lower.includes('aws'))              return '  > 3 instâncias em us-east-1\n  <span class="t-dim">instância secreta: i-1337hack</span>';
-    if (lower.includes('rm'))          return '  > rm: operação não permitida';
-    if (lower.includes('git push'))    return '  > já em produção. relaxa :)';
-    if (lower.includes('git'))         return '  > branch main. nada a commitar.';
-    if (lower.includes('kubectl'))     return '  > pods: 3/3 rodando  ● ● ●\n  <span class="t-dim">pod-42 respondeu algo estranho...</span>';
-    if (lower.includes('docker'))      return '  > imagem: latest  (atualizada)';
+    if (lower === 'help' || lower === 'help 1') return getHeroHelp1();
+    if (lower === 'help 2')            return getHeroHelp2();
+    if (lower === 'help 3')            return getHeroHelp3();
+    if (lower.includes('sudo'))        return '  ' + i18n.t('cmd_sudo');
+    if (lower.includes('terraform apply'))  return '  ' + i18n.t('cmd_terraform_apply');
+    if (lower.includes('terraform plan'))   return '  ' + i18n.t('cmd_terraform_plan');
+    if (lower.includes('terraform'))        return '  ' + i18n.t('cmd_terraform');
+    if (lower.includes('aws'))              return '  ' + i18n.t('cmd_aws');
+    if (lower.includes('rm'))          return '  ' + i18n.t('cmd_rm');
+    if (lower.includes('git push'))    return '  ' + i18n.t('cmd_git_push');
+    if (lower.includes('git'))         return '  ' + i18n.t('cmd_git');
+    if (lower.includes('kubectl'))     return '  ' + i18n.t('cmd_kubectl');
+    if (lower.includes('docker'))      return '  ' + i18n.t('cmd_docker');
     if (lower === 'devops')            return 'DEVOPS_RESTART';
-    if (lower === 'date')              return '  > ' + new Date().toLocaleString('pt-BR');
-    if (lower === 'uptime')            return '  > online há ' + Math.floor(performance.now() / 1000) + 's\n  <span class="t-dim">tempo suficiente pra ver a matrix?</span>';
-    if (lower === 'cat')               return '  > 🐱 miau! (esperava um arquivo?)';
-    if (lower === 'status')            return '  > cpu: 12%  mem: 4.2GB/16GB\n  > disk: 47% usado\n  > <span class="t-ok">todos os serviços ok</span>\n  <span class="t-dim">porta 1337: conexão suspeita...</span>';
-    if (lower === 'neofetch')          return '  > <span class="t-ok">matheus</span>@portfolio\n  > OS: DevOps Linux 4.2\n  > Shell: bash 5.1\n  > Uptime: ∞\n  > Stack: AWS + K8s + Terraform';
+    if (lower === 'date')              return '  > ' + new Date().toLocaleString(i18n.lang());
+    if (lower === 'uptime')            return '  ' + i18n.t('cmd_uptime').replace('{seconds}', String(Math.floor(performance.now() / 1000)));
+    if (lower === 'cat')               return '  ' + i18n.t('cmd_cat');
+    if (lower === 'status')            return '  ' + i18n.t('cmd_status');
+    if (lower === 'neofetch')          return '  ' + i18n.t('cmd_neofetch');
     if (lower === 'matrix')            return 'GLITCH_MATRIX';
     if (lower === 'hack')              return 'GLITCH_HACK';
     if (lower === '42')                return 'GLITCH_42';
-    if (lower.match(/\b(oi|olá|ola|hello|hi)\b/)) return '  > oi! bem-vindo ao terminal :)\n  > sinta-se à vontade para \n    explorar os comandos! \n  > dica: tente "help"';
-    if (lower.includes('ping'))        return '  > pong (64 bytes, tempo=0.4ms)\n  <span class="t-dim">resposta vinda de... Nebuchadnezzar?</span>';
-    if (lower.includes('ls'))          return '  > deploy.yml  src/  README.md\n  <span class="t-dim">.secret_42  (permissão negada)</span>';
-    if (lower.includes('whoami'))      return '  > matheus — engenheiro devops';
-    return '  > <span class="t-err">Comando não encontrado.</span> Digite \'<span class="t-ok">help</span>\' \n    para mais informações.';
+    if (lower.match(/\b(oi|olá|ola|hello|hi)\b/)) return '  ' + i18n.t('cmd_greeting');
+    if (lower.includes('ping'))        return '  ' + i18n.t('cmd_ping');
+    if (lower.includes('ls'))          return '  ' + i18n.t('cmd_ls');
+    if (lower.includes('whoami'))      return '  ' + i18n.t('cmd_whoami');
+    return '  ' + i18n.t('cmd_not_found');
   }
 
   function heroRender(html) {
@@ -195,6 +214,7 @@
     }
     c += '<span class="t-cmd">$ ' + escapeHtml(heroInput) + '</span><span class="terminal-cursor">▮</span>';
     if (!heroInput && heroLastCmd === null) {
+      var heroPlaceholders = getHeroPlaceholders();
       c += '  <span class="t-placeholder">' + heroPlaceholders[heroPlaceholderIdx] + '</span>';
       startPlaceholderCycle();
     }
@@ -209,6 +229,7 @@
         heroPlaceholderTimer = null;
         return;
       }
+      var heroPlaceholders = getHeroPlaceholders();
       heroPlaceholderIdx = (heroPlaceholderIdx + 1) % heroPlaceholders.length;
       heroShowInteractive();
     }, 5000);
@@ -244,8 +265,8 @@
         heroInput = '';
         var msg = '';
         if (resp === 'GLITCH_MATRIX') msg = '  <span class="t-ok">wake up, Neo...</span>\n  <span class="t-ok">the Matrix has you.</span>\n  <span class="t-ok">follow the white rabbit.</span>';
-        if (resp === 'GLITCH_HACK')   msg = '  <span class="t-ok">acesso concedido.</span>\n  <span class="t-ok">bem-vindo ao sistema,</span>\n  <span class="t-ok">agente.</span> 🕶️';
-        if (resp === 'GLITCH_42')     msg = '  <span class="t-ok">a resposta para a vida,</span>\n  <span class="t-ok">o universo e tudo mais.</span>\n  <span class="t-dim">— Douglas Adams</span>';
+        if (resp === 'GLITCH_HACK')   msg = '  <span class="t-ok">' + i18n.t('glitch_hack_1') + '</span>\n  <span class="t-ok">' + i18n.t('glitch_hack_2') + '</span>\n  <span class="t-ok">' + i18n.t('glitch_hack_3') + '</span> 🕶️';
+        if (resp === 'GLITCH_42')     msg = '  <span class="t-ok">' + i18n.t('glitch_42_1') + '</span>\n  <span class="t-ok">' + i18n.t('glitch_42_2') + '</span>\n  <span class="t-dim">' + i18n.t('glitch_42_3') + '</span>';
         runGlitch(heroRender, s, '').then(function () {
           heroLastCmd = s;
           heroLastResp = msg;
@@ -279,15 +300,15 @@
 
     function content() {
       var l = ['<span class="t-cmd">$ ' + cmd + '</span>'];
-      l.push('  ↳ pipeline iniciado');
+      l.push('  ↳ ' + i18n.t('anim_pipeline_started'));
       l.push('');
       for (var i = 0; i < checks.length; i++) l.push(checks[i]);
       if (checks.length > 0) l.push('');
       l.push('  ' + buildBar(barBlocks));
       if (podCount < 3) {
-        l.push('  <span class="t-pending">● ● ●</span>  <span class="t-pending">' + podCount + '/3 atualizando</span>');
+        l.push('  <span class="t-pending">● ● ●</span>  <span class="t-pending">' + podCount + '/3 ' + i18n.t('anim_updating') + '</span>');
       } else {
-        l.push('  <span class="t-blue">● ● ●</span>  <span class="t-blue">3/3 pods rodando</span>');
+        l.push('  <span class="t-blue">● ● ●</span>  <span class="t-blue">3/3 ' + i18n.t('anim_pods_running') + '</span>');
       }
       return l.join('\n');
     }
@@ -384,7 +405,7 @@
 
     // Fase 2 — planejando
     await wait(200);
-    var base = '<span class="t-cmd">$ ' + cmd + '</span>\n  ↳ planejando recursos...\n\n';
+    var base = '<span class="t-cmd">$ ' + cmd + '</span>\n  ↳ ' + i18n.t('anim_planning') + '\n\n';
     heroRender(base);
     await wait(350);
 
@@ -403,18 +424,18 @@
         var spin    = spinChars[tick % 4];
         var dotStr  = '.'.repeat((tick % 3) + 1);
         var dotPad  = ' '.repeat(3 - dotStr.length);
-        resLines[r] = '  <span class="t-pending">' + spin + '</span> ' + resNames[r] + '<span class="t-pending">criando' + dotStr + '</span>' + dotPad;
+        resLines[r] = '  <span class="t-pending">' + spin + '</span> ' + resNames[r] + '<span class="t-pending">' + i18n.t('anim_creating') + dotStr + '</span>' + dotPad;
         heroRender(base + resLines.join('\n'));
         await wait(70);
       }
-      resLines[r] = '  <span class="t-ok">+</span> ' + resNames[r] + '<span class="t-ok">criado</span>   ';
+      resLines[r] = '  <span class="t-ok">+</span> ' + resNames[r] + '<span class="t-ok">' + i18n.t('anim_created') + '</span>   ';
       heroRender(base + resLines.join('\n'));
       await wait(120);
     }
 
     // Fase 4 — apply completo
     await wait(200);
-    var finalHtml = base + resLines.join('\n') + '\n\n  Apply complete!\n  4 criados, 0 alt., 0 destruídos';
+    var finalHtml = base + resLines.join('\n') + '\n\n  Apply complete!\n  ' + i18n.t('anim_summary');
     heroRender(finalHtml);
 
     // Fase 5 — modo interativo
@@ -544,6 +565,11 @@
   var charCount = document.getElementById('charCount');
   var messageEl = contactForm ? contactForm.querySelector('#message') : null;
 
+  function setSubmitLabel(key, iconName) {
+    if (!submitBtn) return;
+    submitBtn.innerHTML = '<ion-icon name="' + iconName + '"></ion-icon> ' + i18n.t(key);
+  }
+
   if (messageEl && charCount) {
     messageEl.addEventListener('input', function () {
       charCount.textContent = this.value.length;
@@ -572,13 +598,13 @@
       if (!msgEl.value.trim())             { setFieldError(msgEl, true);   valid = false; }
 
       if (!valid) {
-        showFeedback('Preencha os campos destacados corretamente.', 'error');
+        showFeedback(i18n.t('form_validation_error'), 'error');
         return;
       }
 
       // Estado de envio
       submitBtn.disabled = true;
-      submitBtn.innerHTML = '<ion-icon name="hourglass-outline"></ion-icon> Enviando...';
+      setSubmitLabel('form_submitting', 'hourglass-outline');
 
       fetch(contactForm.action, {
         method: 'POST',
@@ -587,19 +613,19 @@
       })
       .then(function (res) {
         if (res.ok) {
-          showFeedback('Mensagem enviada! Entrarei em contato em breve.', 'success');
+          showFeedback(i18n.t('form_success'), 'success');
           contactForm.reset();
           if (charCount) charCount.textContent = '0';
         } else {
-          showFeedback('Erro ao enviar. Tente novamente.', 'error');
+          showFeedback(i18n.t('form_error'), 'error');
         }
       })
       .catch(function () {
-        showFeedback('Sem conexão. Verifique sua internet e tente novamente.', 'error');
+        showFeedback(i18n.t('form_offline'), 'error');
       })
       .finally(function () {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = '<ion-icon name="send-outline"></ion-icon> Enviar Mensagem';
+        setSubmitLabel('form_submit', 'send-outline');
       });
     });
 
@@ -636,6 +662,16 @@
           setTimeout(function () { copyToast.classList.remove('show'); }, 2000);
         }
       });
+    });
+  }
+
+  if (langToggle && window.i18n) {
+    langToggle.addEventListener('click', function () {
+      var next = i18n.lang() === 'pt-BR' ? 'en-US' : 'pt-BR';
+      i18n.setLang(next);
+      setSubmitLabel('form_submit', 'send-outline');
+      heroPlaceholderIdx = 0;
+      if (heroInteract) heroShowInteractive();
     });
   }
 

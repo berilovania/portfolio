@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Matheus S. Caldas — DevOps" />
+  <meta name="description" content="Matheus S. Caldas — DevOps" data-i18n-content="meta_description" />
   <title>Matheus S. Caldas — DevOps</title>
   <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
 
@@ -45,18 +45,24 @@
     <nav class="nav-container">
       <a href="#hero" class="nav-logo">MC</a>
 
-      <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#skills"         class="nav-link" data-i18n="nav_skills">Habilidades</a></li>
+        <li><a href="#projects"       class="nav-link" data-i18n="nav_projects">Projetos</a></li>
+        <li><a href="#certifications" class="nav-link" data-i18n="nav_certifications">Certificações</a></li>
+        <li><a href="#contact"        class="nav-link" data-i18n="nav_contact">Contato</a></li>
+      </ul>
+
+      <button class="lang-toggle" id="langToggle" aria-label="Switch language">
+        <span class="lang-option" data-lang="pt-BR">PT</span>
+        <span class="lang-sep">/</span>
+        <span class="lang-option" data-lang="en-US">EN</span>
+      </button>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" data-i18n-aria="nav_toggle_label" aria-expanded="false">
         <span></span>
         <span></span>
         <span></span>
       </button>
-
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#skills"         class="nav-link">Habilidades</a></li>
-        <li><a href="#projects"       class="nav-link">Projetos</a></li>
-        <li><a href="#certifications" class="nav-link">Certificações</a></li>
-        <li><a href="#contact"        class="nav-link">Contato</a></li>
-      </ul>
     </nav>
   </header>
 
@@ -77,17 +83,17 @@
     <div class="hero-inner">
 
       <div class="hero-content">
-        <p class="hero-greeting">Olá, eu sou</p>
+        <p class="hero-greeting" data-i18n="hero_greeting">Olá, eu sou</p>
         <h1 class="hero-name">Matheus S. Caldas</h1>
         <p class="hero-role">DevOps <span class="accent">&amp;</span> Cloud Engineer</p>
-        <p class="hero-description">
+        <p class="hero-description" data-i18n="hero_description">
           Apaixonado por automação, infraestrutura como código e soluções escaláveis na nuvem.
           Transformando desafios complexos em pipelines elegantes e confiáveis.
         </p>
 
         <div class="hero-cta">
-          <a href="#projects" class="btn btn-primary">Ver Projetos</a>
-          <a href="#contact"  class="btn btn-outline">Fale Comigo</a>
+          <a href="#projects" class="btn btn-primary" data-i18n="hero_cta_projects">Ver Projetos</a>
+          <a href="#contact"  class="btn btn-outline" data-i18n="hero_cta_contact">Fale Comigo</a>
         </div>
 
         <div class="hero-socials">
@@ -130,13 +136,13 @@
 
       <div class="section-header fade-in">
         <span class="section-tag">// skills</span>
-        <h2 class="section-title">Habilidades &amp; Tecnologias</h2>
+        <h2 class="section-title" data-i18n="section_skills_title">Habilidades &amp; Tecnologias</h2>
       </div>
 
       <div class="skills-grid fade-in">
 
         <div class="skills-category">
-          <h3 class="skills-category-title">Cloud &amp; Infraestrutura</h3>
+          <h3 class="skills-category-title" data-i18n="skills_cat_cloud">Cloud &amp; Infraestrutura</h3>
           <div class="skills-pills">
             <span class="skill-pill"><i class="devicon-amazonwebservices-plain-wordmark colored"></i> AWS</span>
             <span class="skill-pill"><i class="devicon-terraform-plain colored"></i> Terraform</span>
@@ -148,7 +154,7 @@
         </div>
 
         <div class="skills-category">
-          <h3 class="skills-category-title">DevOps &amp; Automação</h3>
+          <h3 class="skills-category-title" data-i18n="skills_cat_devops">DevOps &amp; Automação</h3>
           <div class="skills-pills">
             <span class="skill-pill"><i class="devicon-linux-plain"></i> Linux</span>
             <span class="skill-pill"><i class="devicon-python-plain colored"></i> Python</span>
@@ -159,7 +165,7 @@
         </div>
 
         <div class="skills-category">
-          <h3 class="skills-category-title">Front-End & Back-End</h3>
+          <h3 class="skills-category-title" data-i18n="skills_cat_dev">Front-End & Back-End</h3>
           <div class="skills-pills">
             <span class="skill-pill"><i class="devicon-html5-plain colored"></i> HTML5</span>
             <span class="skill-pill"><i class="devicon-css3-plain colored"></i> CSS3</span>
@@ -183,7 +189,7 @@
 
       <div class="section-header fade-in">
         <span class="section-tag">// projects</span>
-        <h2 class="section-title">Projetos</h2>
+        <h2 class="section-title" data-i18n="section_projects_title">Projetos</h2>
       </div>
 
       <div class="projects-grid fade-in">
@@ -193,7 +199,8 @@
             data-github="https://github.com/berilovania/OrderService-ProjectDevOps"
             data-image="images/order-service.png"
             data-title="OrderService Pipeline"
-            data-description="Pipeline CI/CD completo construído com GitHub Actions, com deploy automático em Kubernetes (k3s) na Google Cloud Platform. Inclui build multi-stage Docker para otimização do tamanho da imagem, scan de vulnerabilidades com Trivy integrado ao pipeline, coleta de métricas com Prometheus e banco de dados PostgreSQL como StatefulSet. Todo o fluxo, do push de código até a atualização dos pods em produção, é totalmente automatizado.">
+            data-description="Pipeline CI/CD completo construído com GitHub Actions, com deploy automático em Kubernetes (k3s) na Google Cloud Platform. Inclui build multi-stage Docker para otimização do tamanho da imagem, scan de vulnerabilidades com Trivy integrado ao pipeline, coleta de métricas com Prometheus e banco de dados PostgreSQL como StatefulSet. Todo o fluxo, do push de código até a atualização dos pods em produção, é totalmente automatizado."
+            data-i18n-description="project_orderservice_full">
             <div class="project-card-image">
               <img src="images/order-service.png" alt="OrderService Pipeline dashboard" loading="lazy" />
             </div>
@@ -210,7 +217,7 @@
                 </div>
               </div>
               <h3 class="project-title">OrderService Pipeline</h3>
-              <p class="project-description">
+              <p class="project-description" data-i18n="project_orderservice_short">
                 Pipeline CI/CD completo com GitHub Actions, deploy automático em Kubernetes (k3s) na GCP. Inclui build multi-stage Docker, scan de vulnerabilidades com Trivy, métricas Prometheus e PostgreSQL com StatefulSet.
               </p>
               <div class="project-stack">
@@ -228,7 +235,8 @@
             data-github="https://github.com/berilovania/youtube-ai-summary"
             data-image="images/youtube-ai-summary.png"
             data-title="YouTube AI Summary"
-            data-description="Aplicação web construída com Streamlit que resume automaticamente vídeos do YouTube. Extrai as legendas do vídeo e processa o texto via API Mistral AI para gerar um resumo coerente. Possui modo especial de interpretação de músicas, detecção automática de idioma e exportação dos resumos em TXT ou PDF. Interface simples e direta, ideal para consumir conteúdo longo em fração do tempo.">
+            data-description="Aplicação web construída com Streamlit que resume automaticamente vídeos do YouTube. Extrai as legendas do vídeo e processa o texto via API Mistral AI para gerar um resumo coerente. Possui modo especial de interpretação de músicas, detecção automática de idioma e exportação dos resumos em TXT ou PDF. Interface simples e direta, ideal para consumir conteúdo longo em fração do tempo."
+            data-i18n-description="project_youtube_full">
             <div class="project-card-image">
               <img src="images/youtube-ai-summary.png" alt="YouTube AI Summary screenshot" loading="lazy" />
             </div>
@@ -245,7 +253,7 @@
                 </div>
               </div>
               <h3 class="project-title">YouTube AI Summary</h3>
-              <p class="project-description">
+              <p class="project-description" data-i18n="project_youtube_short">
                 Aplicação Streamlit que resume automaticamente vídeos do YouTube extraindo legendas e processando via API Mistral AI. Suporta modo de interpretação de músicas, detecção automática de idioma e exportação em TXT/PDF.
               </p>
               <div class="project-stack">
@@ -261,7 +269,8 @@
             data-github="https://github.com/berilovania/malware-simulation-lab"
             data-image="images/malware_simulation_lab_banner.svg"
             data-title="Malware Simulation Lab"
-            data-description="Laboratório educacional de simulação de malware em ambiente controlado e isolado. Implementa dois módulos: um ransomware simulado que criptografa arquivos via biblioteca Cryptography, demonstrando como esse tipo de ataque funciona internamente; e um keylogger que captura pressionamentos de teclas com Pynput e os envia por e-mail. O foco é educacional e defensivo — cada módulo vem acompanhado de análise do comportamento malicioso e estratégias concretas de mitigação.">
+            data-description="Laboratório educacional de simulação de malware em ambiente controlado e isolado. Implementa dois módulos: um ransomware simulado que criptografa arquivos via biblioteca Cryptography, demonstrando como esse tipo de ataque funciona internamente; e um keylogger que captura pressionamentos de teclas com Pynput e os envia por e-mail. O foco é educacional e defensivo — cada módulo vem acompanhado de análise do comportamento malicioso e estratégias concretas de mitigação."
+            data-i18n-description="project_malware_full">
             <div class="project-card-image">
               <img src="images/malware_simulation_lab_banner.svg" alt="Malware Simulation Lab banner" loading="lazy" />
             </div>
@@ -278,7 +287,7 @@
                 </div>
               </div>
               <h3 class="project-title">Malware Simulation Lab</h3>
-              <p class="project-description">
+              <p class="project-description" data-i18n="project_malware_short">
                 Laboratório educacional de simulação de malware em ambiente controlado. Implementa ransomware simulado com criptografia de arquivos e keylogger com envio por e-mail, focado em defesa e mitigação de ameaças.
               </p>
               <div class="project-stack">
@@ -294,7 +303,8 @@
             data-github="https://github.com/berilovania/kali-medusa-bruteforce-lab"
             data-image="images/brute_force_lab_banner.svg"
             data-title="Brute Force Lab"
-            data-description="Laboratório de segurança ofensiva configurado com Kali Linux e a ferramenta Medusa. Cobre três cenários: ataques de força bruta em FTP, testes em aplicações web vulneráveis (DVWA) com bypass de proteção CSRF, e password spraying em SMB. Cada cenário é documentado com análise dos vetores explorados e estratégias de mitigação, sendo valioso tanto para pentesters em formação quanto para profissionais de segurança defensiva.">
+            data-description="Laboratório de segurança ofensiva configurado com Kali Linux e a ferramenta Medusa. Cobre três cenários: ataques de força bruta em FTP, testes em aplicações web vulneráveis (DVWA) com bypass de proteção CSRF, e password spraying em SMB. Cada cenário é documentado com análise dos vetores explorados e estratégias de mitigação, sendo valioso tanto para pentesters em formação quanto para profissionais de segurança defensiva."
+            data-i18n-description="project_bruteforce_full">
             <div class="project-card-image">
               <img src="images/brute_force_lab_banner.svg" alt="Brute Force Lab banner" loading="lazy" />
             </div>
@@ -311,7 +321,7 @@
                 </div>
               </div>
               <h3 class="project-title">Brute Force Lab</h3>
-              <p class="project-description">
+              <p class="project-description" data-i18n="project_bruteforce_short">
                 Laboratório de segurança ofensiva com Kali Linux e Medusa. Demonstra brute force em FTP, testes em aplicações web (DVWA) com bypass de CSRF, e password spraying em SMB, com estratégias de mitigação documentadas.
               </p>
               <div class="project-stack">
@@ -328,7 +338,7 @@
       <div class="projects-cta fade-in">
         <a href="https://github.com/berilovania" target="_blank" rel="noopener" class="btn btn-outline">
           <ion-icon name="logo-github"></ion-icon>
-          Ver mais no GitHub
+          <span data-i18n="projects_cta">Ver mais no GitHub</span>
         </a>
       </div>
 
@@ -346,7 +356,7 @@
 
       <div class="section-header fade-in">
         <span class="section-tag">// certs</span>
-        <h2 class="section-title">Certificações</h2>
+        <h2 class="section-title" data-i18n="section_certs_title">Certificações</h2>
       </div>
 
       <div class="certs-carousel-wrapper fade-in">
@@ -473,13 +483,13 @@
 
       <div class="section-header fade-in">
         <span class="section-tag">// contact</span>
-        <h2 class="section-title">Vamos Conversar</h2>
+        <h2 class="section-title" data-i18n="section_contact_title">Vamos Conversar</h2>
       </div>
 
       <div class="contact-grid fade-in">
 
         <div class="contact-info">
-          <p class="contact-intro">
+          <p class="contact-intro" data-i18n="contact_intro">
             Estou aberto a oportunidades nas áreas de DevOps e Cloud Engineering.
             Sinta-se à vontade para entrar em contato — adoro discutir novos projetos e desafios tecnológicos!
           </p>
@@ -507,25 +517,25 @@
           <!-- Honeypot anti-spam (invisível para humanos) -->
           <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
           <!-- Assunto personalizado no e-mail recebido -->
-          <input type="hidden" name="_subject" value="Novo contato via portfólio" />
+          <input type="hidden" name="_subject" value="Novo contato via portfólio" data-i18n-value="form_subject" />
 
           <div class="form-group">
-            <label for="name">Nome</label>
-            <input type="text" id="name" name="name" placeholder="Seu nome" required />
+            <label for="name" data-i18n="form_label_name">Nome</label>
+            <input type="text" id="name" name="name" placeholder="Seu nome" data-i18n-placeholder="form_placeholder_name" required />
           </div>
           <div class="form-group">
-            <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" placeholder="seu@email.com" required />
+            <label for="email" data-i18n="form_label_email">E-mail</label>
+            <input type="email" id="email" name="email" placeholder="seu@email.com" data-i18n-placeholder="form_placeholder_email" required />
           </div>
           <div class="form-group">
-            <label for="message">Mensagem</label>
-            <textarea id="message" name="message" rows="5" placeholder="Sua mensagem..." maxlength="500" required></textarea>
+            <label for="message" data-i18n="form_label_message">Mensagem</label>
+            <textarea id="message" name="message" rows="5" placeholder="Sua mensagem..." data-i18n-placeholder="form_placeholder_message" maxlength="500" required></textarea>
             <div class="char-counter"><span id="charCount">0</span> / 500</div>
           </div>
           <div class="form-feedback" id="formFeedback" aria-live="polite"></div>
           <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
             <ion-icon name="send-outline"></ion-icon>
-            Enviar Mensagem
+            <span data-i18n="form_submit">Enviar Mensagem</span>
           </button>
         </form>
 
@@ -539,7 +549,7 @@
   <footer id="footer">
     <div class="footer-container">
       <p class="footer-text">
-        Feito por <span class="accent">Matheus S. Caldas</span> &mdash; 2026
+        <span data-i18n="footer_made_by">Feito por</span> <span class="accent">Matheus S. Caldas</span> &mdash; 2026
       </p>
       <div class="footer-socials">
         <a href="https://www.linkedin.com/in/matheus-santos-c/" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-link">
@@ -552,12 +562,12 @@
     </div>
   </footer>
 
-  <div class="copy-toast" id="copyToast">E-mail copiado!</div>
+  <div class="copy-toast" id="copyToast" data-i18n="copy_toast">E-mail copiado!</div>
 
   <!-- PROJECT DIALOG -->
   <dialog id="projectDialog" class="project-dialog">
     <div class="project-dialog-inner">
-      <button class="project-dialog-close" id="projectDialogClose" aria-label="Fechar">
+      <button class="project-dialog-close" id="projectDialogClose" aria-label="Fechar" data-i18n-aria="dialog_close_label">
         <ion-icon name="close-outline"></ion-icon>
       </button>
       <div class="project-dialog-image">
@@ -569,7 +579,7 @@
         <p id="projectDialogDesc" class="project-dialog-desc"></p>
         <a id="projectDialogBtn" href="#" target="_blank" rel="noopener" class="btn btn-primary project-dialog-btn">
           <ion-icon name="logo-github"></ion-icon>
-          Ver projeto
+          <span data-i18n="project_dialog_btn">Ver projeto</span>
         </a>
       </div>
     </div>
@@ -584,7 +594,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
   <!-- Scripts -->
-  <script src="js/script.js?v=20260323b"></script>
+  <script src="js/i18n.js?v=20260324"></script>
+  <script src="js/script.js?v=20260324"></script>
   <script src="js/particles.js?v=20260323b"></script>
   <script src="js/section-effects.js?v=20260323b"></script>
   <script src="js/effects.js?v=20260323b"></script>

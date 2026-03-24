@@ -235,6 +235,43 @@ ul {
   align-items: center;
 }
 
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(157, 95, 255, 0.45);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
+}
+
+.lang-toggle:hover {
+  border-color: rgba(157, 95, 255, 0.75);
+  box-shadow: 0 0 14px rgba(124, 58, 237, 0.28);
+  background: rgba(255, 255, 255, 0.09);
+  transform: translateY(-1px);
+}
+
+.lang-option {
+  color: rgba(255, 255, 255, 0.4);
+  transition: color var(--transition-fast), text-shadow var(--transition-fast);
+}
+
+.lang-option.active {
+  color: #9d5fff;
+  text-shadow: 0 0 8px rgba(157, 95, 255, 0.45);
+}
+
+.lang-sep {
+  color: rgba(255, 255, 255, 0.45);
+}
+
 .nav-link {
   font-size: 0.9rem;
   font-weight: 500;
@@ -1178,6 +1215,14 @@ ul {
 
   .nav-link::after {
     display: none;
+  }
+
+  .nav-container {
+    gap: 10px;
+  }
+
+  .lang-toggle {
+    margin-left: auto;
   }
 
   /* Hero */
