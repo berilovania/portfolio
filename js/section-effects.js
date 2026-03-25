@@ -321,7 +321,7 @@
   // ============================================================
   var dataFlowEffect = {
     init: function (canvas, ctx) {
-      var streamCount = isMobile ? 6 : 12;
+      var streamCount = isMobile ? 9 : 18;
       var streams = [];
       var h = canvas.height / DPR;
       var w = canvas.width / DPR;
