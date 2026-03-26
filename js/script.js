@@ -696,7 +696,8 @@
   var projectDialogImg   = document.getElementById('projectDialogImg');
   var projectDialogTitle = document.getElementById('projectDialogTitle');
   var projectDialogDesc  = document.getElementById('projectDialogDesc');
-  var projectDialogBtn   = document.getElementById('projectDialogBtn');
+  var projectDialogBtn     = document.getElementById('projectDialogBtn');
+  var projectDialogSiteBtn = document.getElementById('projectDialogSiteBtn');
   if (projectDialog) {
     document.querySelectorAll('.project-card[data-github]').forEach(function (card) {
       card.addEventListener('click', function () {
@@ -704,6 +705,12 @@
         projectDialogImg.alt = this.getAttribute('data-title');
         projectDialogDesc.textContent = this.getAttribute('data-description');
         projectDialogBtn.href         = this.getAttribute('data-github');
+
+        var siteUrl = this.getAttribute('data-site');
+        if (projectDialogSiteBtn) {
+          projectDialogSiteBtn.href             = siteUrl || '#';
+          projectDialogSiteBtn.style.display    = siteUrl ? '' : 'none';
+        }
 
         // Build title: tag icon + tag text + separator + project name
         var cardTag = this.querySelector('.project-tag');

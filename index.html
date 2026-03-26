@@ -212,9 +212,10 @@
           <!-- ── Projeto ── -->
           <article class="project-card glass-card" tabindex="0" role="button"
             data-github="https://github.com/berilovania/OrderService-ProjectDevOps"
+            data-site="https://order-service.matheuscaldas.com"
             data-image="images/order-service.png"
             data-title="OrderService Pipeline"
-            data-description="Pipeline CI/CD completo construído com GitHub Actions, com deploy automático em Kubernetes (k3s) na Google Cloud Platform. Inclui build multi-stage Docker para otimização do tamanho da imagem, scan de vulnerabilidades com Trivy integrado ao pipeline, coleta de métricas com Prometheus e banco de dados PostgreSQL como StatefulSet. Todo o fluxo, do push de código até a atualização dos pods em produção, é totalmente automatizado."
+            data-description="Pipeline DevOps de ponta a ponta construído com GitHub Actions. O fluxo cobre testes automáticos contra PostgreSQL real, build multi-stage Docker, scan de vulnerabilidades com Trivy (bloqueia CVEs CRITICAL/HIGH), publicação no GHCR com tag por commit SHA e deploy automático em cluster k3s na GCP Compute Engine via SSH. A aplicação — uma API REST FastAPI de gerenciamento de pedidos — roda com 2 réplicas, liveness/readiness probes, rolling update sem downtime e PostgreSQL StatefulSet com PVC persistente. Infraestrutura completa: NGINX Ingress com HTTPS automático via cert-manager + Let's Encrypt, rate-limiting, métricas Prometheus com dashboards Grafana auto-provisionados e SecurityContext restritivo (container não-root, filesystem read-only). Do git push à produção, zero intervenção manual."
             data-i18n-description="project_orderservice_full">
             <div class="project-card-image">
               <img src="images/order-service.png" alt="OrderService Pipeline dashboard" loading="lazy" />
@@ -600,10 +601,16 @@
       <div class="project-dialog-content">
         <h3 id="projectDialogTitle" class="project-dialog-title"></h3>
         <p id="projectDialogDesc" class="project-dialog-desc"></p>
-        <a id="projectDialogBtn" href="#" target="_blank" rel="noopener" class="btn btn-primary project-dialog-btn">
-          <ion-icon name="logo-github"></ion-icon>
-          <span data-i18n="project_dialog_btn">Ver projeto</span>
-        </a>
+        <div class="project-dialog-actions">
+          <a id="projectDialogSiteBtn" href="#" target="_blank" rel="noopener" class="btn btn-outline project-dialog-btn">
+            <ion-icon name="open-outline"></ion-icon>
+            <span data-i18n="project_dialog_site_btn">Acessar Site</span>
+          </a>
+          <a id="projectDialogBtn" href="#" target="_blank" rel="noopener" class="btn btn-primary project-dialog-btn">
+            <ion-icon name="logo-github"></ion-icon>
+            <span data-i18n="project_dialog_btn">Ver projeto</span>
+          </a>
+        </div>
       </div>
     </div>
   </dialog>
